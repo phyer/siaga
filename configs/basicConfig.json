@@ -1,0 +1,1073 @@
+{
+	"production": {
+		"redisLocal": {
+			"url": "192.168.5.189:6382",
+			"password": "",
+			"index": 5,
+			"description": ""
+		},
+		"credential": {
+      "secretKey": "D6D74DF9DD60A25BE2B27CA71D8F814D",
+			"baseUrl": "aws.okx.com",
+			"okAccessKey": "fe468418-5e40-433f-8d04-04951286d417",
+			"okAccessPassphrase": "M4pw71Id"
+		},
+		"redisRemotes": [{
+			"url": "192.168.5.189:6382",
+			"password": "",
+			"index": 5,
+			"description": ""
+		}],
+		"threads": {
+			"asyncChannels": 20,
+			"maxLenTickerStream": 65536,
+			"bigTorque": {
+				"myFavorites": {
+					"m2": 0.01,
+					"m4": 0.02,
+					"m8": 0.03
+				},
+				"investigate": {
+					"m2": 0.02,
+					"m4": 0.03,
+					"m8": 0.04
+				}
+			}
+		},
+		"candleDimentions": [
+			"1m",
+			"3m",
+			"5m",
+			"15m",
+			"30m",
+			"1H",
+			"2H",
+			"4H",
+			"6H",
+			"12H",
+			"1D",
+			"2D",
+			"5D"
+		],
+		"softCandleSegmentList": [{
+		    "startTime": "2021-12-04 20:00.000",
+				"enabled": false,
+				"seg": "1m"
+			},
+      {
+		    "startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "3m"
+			},
+      {
+				"startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "5m"
+			},
+			{
+				"startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "15m"
+			},
+			{
+				"startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "30m"
+			},
+			{
+				"startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "1H"
+			},
+			{
+				"startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "2H"
+			},
+			{
+				"startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "4H"
+			},
+			{
+				"startTime": "2021-12-04 18:00.000",
+				"enabled": true,
+				"seg": "6H"
+			},
+			{
+				"startTime": "2021-12-04 12:00.000",
+				"enabled": true,
+				"seg": "12H"
+			},
+			{
+				"startTime": "2021-12-04 00:00.000",
+				"enabled": true,
+				"seg": "1D"
+			},
+			{
+				"startTime": "2021-12-04 00:00.000",
+				"enabled": true,
+				"seg": "2D"
+			},
+			{
+				"startTime": "2021-12-04 00:00.000",
+				"enabled": true,
+				"seg": "5D"
+			}
+		],
+
+
+		"dingding": {
+			"baseUrl": "https://oapi.dingtalk.com/robot/send",
+			"robots": {
+				"dingman": {
+					"secret": "SECb5a82adcbbbfdbabfb5e9e1c46a99eee4fc831dd1fba926610bd41e7ade94656",
+					"accessToken": "1488ae0a935db457b5360f14821c407aba47e09501df2bd3ff330e4bcc5166fe"
+				},
+        "paidaxing":{
+          "secret": "SEC592da119a4395afce37300d1581cc1f73f87eb1cd82917c883a6250ae2361f56",
+          "accessToken":"bf554f6b0bb5a78c9283ea231a78b3fd6f7f16800128cad7504310ba6e9f93cf"
+        },
+        "pengpeng":{
+          "secret": "SEC5727929ced894cae474de9a2572eb044f1bfae48597928f3410494a16b158928",
+          "accessToken":"f7a78faaef662186434a444d6281e90849c38879f44d4eb00c8de1e6fdb5d97a"
+        }
+			}
+		},
+		"myfavorites": [
+			"BTC-USDT"
+		]
+	},
+	"stage": {
+		"redisLocal": {
+			"url": "localhost:6379",
+			"password": "",
+			"index": 5,
+			"description": ""
+		},
+		"credential": {
+			"secretKey": "D6D74DF9DD60A25BE2B27CA71D8F814D",
+			"baseUrl": "aws.okx.com",
+			"okAccessKey": "fe468418-5e40-433f-8d04-04951286d417",
+			"okAccessPassphrase": "M4pw71Id"
+		},
+		"redisRemotes": {
+			"master": {
+				"url": "localhost:16379",
+				"password": "",
+				"index": 5,
+				"description": ""
+			},
+			"slave": {
+				"url": "localhost:16379",
+				"password": "",
+				"index": 5,
+				"description": ""
+			}
+		},
+		"threads": {
+			"asyncChannels": 20,
+			"maxLenTickerStream": 65536,
+			"bigTorque": {
+				"myFavorites": {
+					"m2": 0.03,
+					"m4": 0.04,
+					"m8": 0.05
+				},
+				"investigate": {
+					"m2": 0.05,
+					"m4": 0.06,
+					"m8": 0.07
+				}
+			}
+		},
+		"candleDimentions": [
+			"1m",
+			"3m",
+			"5m",
+			"15m",
+			"30m",
+			"1H",
+			"2H",
+			"4H",
+			"6H",
+			"12H",
+			"1D",
+			"2D",
+			"5D"
+		],
+    "focusList": [
+      "ETH-USDT",
+      "BTC-USDT",
+      "OKB-USDT",
+      "DOGE-USDT",
+      "SOL-USDT",
+      "XRP-USDT",
+      "DYDX-USDT"
+    ],
+		"softCandleSegmentList": [{
+		    "startTime": "2021-12-04 20:00.000",
+				"enabled": false,
+				"seg": "1m"
+			},
+      {
+		    "startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "3m"
+			},
+      {
+				"startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "5m"
+			},
+			{
+				"startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "15m"
+			},
+			{
+				"startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "30m"
+			},
+			{
+				"startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "1H"
+			},
+			{
+				"startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "2H"
+			},
+			{
+				"startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "4H"
+			},
+			{
+				"startTime": "2021-12-04 18:00.000",
+				"enabled": true,
+				"seg": "6H"
+			},
+			{
+				"startTime": "2021-12-04 12:00.000",
+				"enabled": true,
+				"seg": "12H"
+			},
+			{
+				"startTime": "2021-12-04 00:00.000",
+				"enabled": true,
+				"seg": "1D"
+			},
+			{
+				"startTime": "2021-12-04 00:00.000",
+				"enabled": true,
+				"seg": "2D"
+			},
+			{
+				"startTime": "2021-12-04 00:00.000",
+				"enabled": true,
+				"seg": "5D"
+			}
+		],
+
+		"dingding": {
+			"baseUrl": "https://oapi.dingtalk.com/robot/send",
+			"robots": {
+				"dingman": {
+					"secret": "SECb5a82adcbbbfdbabfb5e9e1c46a99eee4fc831dd1fba926610bd41e7ade94656",
+					"accessToken": "1488ae0a935db457b5360f14821c407aba47e09501df2bd3ff330e4bcc5166fe"
+				},
+        "paidaxing":{
+          "secret": "SEC592da119a4395afce37300d1581cc1f73f87eb1cd82917c883a6250ae2361f56",
+          "accessToken":"bf554f6b0bb5a78c9283ea231a78b3fd6f7f16800128cad7504310ba6e9f93cf"
+        },
+        "pengpeng":{
+          "secret": "SEC5727929ced894cae474de9a2572eb044f1bfae48597928f3410494a16b158928",
+          "accessToken":"f7a78faaef662186434a444d6281e90849c38879f44d4eb00c8de1e6fdb5d97a"
+        }
+			}
+		},
+		"myfavorites": [
+			"BTC-USDT"
+		]
+	},
+"upstream_demoEnv": {
+		"redisLocal": {
+			"url": "127.0.0.1:6379",
+			"password": "",
+			"index": 4,
+			"description": ""
+		},
+		"redisLocal2": {
+			"url": "192.168.5.117:6379",
+			"password": "",
+			"index": 8,
+			"description": ""
+		},
+		"credential": {
+			"secretKey": "57181D1DC343AC4F0FAA62BEA086AF03",
+			"baseUrl": "aws.okx.com",
+			"okAccessKey": "c3dfe3b5-e878-4eb0-9a0f-e1a8f64cedc7",
+			"okAccessPassphrase": "d9dHTsRWvm8k3w7"
+		},
+		"redisRemotes": {
+			"master": {
+				"url": "localhost:6391",
+				"password": "",
+				"index": 5,
+				"description": ""
+			},
+			"slave": {
+				"url": "localhost:36379",
+				"password": "",
+				"index": 5,
+				"description": ""
+			}
+		},
+		"threads": {
+			"asyncChannels": 20,
+			"maxLenTickerStream": 65536,
+			"bigTorque": {
+				"myFavorites": {
+					"m2": 0.02,
+					"m4": 0.03,
+					"m8": 0.04
+				},
+				"investigate": {
+					"m2": 0.07,
+					"m4": 0.08,
+					"m8": 0.09
+				}
+			}
+		},
+		"candleDimentions": [
+			"1m",
+			"3m",
+			"5m",
+			"15m",
+			"30m",
+			"1H",
+			"2H",
+			"4H",
+			"6H",
+			"12H",
+			"1D",
+			"2D",
+			"5D"
+		],
+		"softCandleSegmentList": [{
+		    "startTime": "2021-12-04 20:00.000",
+				"enabled": false,
+				"seg": "1m"
+			},
+      {
+		    "startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "3m"
+			},
+      {
+				"startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "5m"
+			},
+			{
+				"startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "15m"
+			},
+			{
+				"startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "30m"
+			},
+			{
+				"startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "1H"
+			},
+			{
+				"startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "2H"
+			},
+			{
+				"startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "4H"
+			},
+			{
+				"startTime": "2021-12-04 18:00.000",
+				"enabled": true,
+				"seg": "6H"
+			},
+			{
+				"startTime": "2021-12-04 12:00.000",
+				"enabled": true,
+				"seg": "12H"
+			},
+			{
+				"startTime": "2021-12-04 00:00.000",
+				"enabled": true,
+				"seg": "1D"
+			},
+			{
+				"startTime": "2021-12-04 00:00.000",
+				"enabled": true,
+				"seg": "2D"
+			},
+			{
+				"startTime": "2021-12-04 00:00.000",
+				"enabled": true,
+				"seg": "5D"
+			}
+		],
+		"dingding": {
+			"baseUrl": "https://oapi.dingtalk.com/robot/send",
+			"robots": {
+				"dingman": {
+					"secret": "SECb5a82adcbbbfdbabfb5e9e1c46a99eee4fc831dd1fba926610bd41e7ade94656",
+					"accessToken": "1488ae0a935db457b5360f14821c407aba47e09501df2bd3ff330e4bcc5166fe"
+				},
+        "pengpeng":{
+          "secret": "SEC5727929ced894cae474de9a2572eb044f1bfae48597928f3410494a16b158928",
+          "accessToken":"f7a78faaef662186434a444d6281e90849c38879f44d4eb00c8de1e6fdb5d97a"
+        },
+        "mufasha":{
+          "secret": "SEC80fdf0444ec128ae9c9a1d058eeb17a660673427f0c68b6c721ba6081cbbc728",
+          "accessToken":"20f2e0c5720c097807f901da1e1fc5b796ec94ebdd1ddc6d2afb83777677142a"
+        },
+        "buzzLightyear":{
+          "secret": "SEC0d6763c70fee1faac8cb1dd6c12b2d7f7652106dec9f51a9635090bb5af42aca",
+          "accessToken":"17d3e8784f140966198fa403f912a6bc5c54143d3753370d26aa756c095ea624"
+        },
+        "diyago":{
+          "secret": "SEC0c57deeef5423ecfdfd203dc12ac16bce6d5c039c26796e7f994dd29334c4377",
+          "accessToken":"15ddab831e9f863ef822967735b088e3227ede04c43621c852ae415b2786886c"
+        },
+        "paidaxing":{
+          "secret": "SEC592da119a4395afce37300d1581cc1f73f87eb1cd82917c883a6250ae2361f56",
+          "accessToken":"bf554f6b0bb5a78c9283ea231a78b3fd6f7f16800128cad7504310ba6e9f93cf"
+        }
+			}
+		},
+		"myfavorites": [
+			"BTC-USDT"
+		]
+	},
+
+	"demoEnv": {
+		"redisLocal": {
+			"url": "127.0.0.1:6379",
+			"password": "",
+			"index": 4,
+			"description": ""
+		},
+		"redisLocal2": {
+			"url": "192.168.5.117:6379",
+			"password": "",
+			"index": 8,
+			"description": ""
+		},
+		"credential": {
+			"secretKey": "57181D1DC343AC4F0FAA62BEA086AF03",
+			"baseUrl": "aws.okx.com",
+			"okAccessKey": "c3dfe3b5-e878-4eb0-9a0f-e1a8f64cedc7",
+			"okAccessPassphrase": "d9dHTsRWvm8k3w7"
+		},
+		"redisRemotes": {
+			"master": {
+				"url": "localhost:6391",
+				"password": "",
+				"index": 5,
+				"description": ""
+			},
+			"slave": {
+				"url": "localhost:36379",
+				"password": "",
+				"index": 5,
+				"description": ""
+			}
+		},
+		"threads": {
+			"asyncChannels": 20,
+			"maxLenTickerStream": 65536,
+			"bigTorque": {
+				"myFavorites": {
+					"m2": 0.02,
+					"m4": 0.03,
+					"m8": 0.04
+				},
+				"investigate": {
+					"m2": 0.07,
+					"m4": 0.08,
+					"m8": 0.09
+				}
+			}
+		},
+		"candleDimentions": [
+			"1m",
+			"3m",
+			"5m",
+			"15m",
+			"30m",
+			"1H",
+			"2H",
+			"4H",
+			"6H",
+			"12H",
+			"1D",
+			"2D",
+			"5D"
+		],
+		"softCandleSegmentList": [{
+		    "startTime": "2021-12-04 20:00.000",
+				"enabled": false,
+				"seg": "1m"
+			},
+      {
+		    "startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "3m"
+			},
+      {
+				"startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "5m"
+			},
+			{
+				"startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "15m"
+			},
+			{
+				"startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "30m"
+			},
+			{
+				"startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "1H"
+			},
+			{
+				"startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "2H"
+			},
+			{
+				"startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "4H"
+			},
+			{
+				"startTime": "2021-12-04 18:00.000",
+				"enabled": true,
+				"seg": "6H"
+			},
+			{
+				"startTime": "2021-12-04 12:00.000",
+				"enabled": true,
+				"seg": "12H"
+			},
+			{
+				"startTime": "2021-12-04 00:00.000",
+				"enabled": true,
+				"seg": "1D"
+			},
+			{
+				"startTime": "2021-12-04 00:00.000",
+				"enabled": true,
+				"seg": "2D"
+			},
+			{
+				"startTime": "2021-12-04 00:00.000",
+				"enabled": true,
+				"seg": "5D"
+			}
+		],
+		"dingding": {
+			"baseUrl": "https://oapi.dingtalk.com/robot/send",
+			"robots": {
+				"dingman": {
+					"secret": "SECb5a82adcbbbfdbabfb5e9e1c46a99eee4fc831dd1fba926610bd41e7ade94656",
+					"accessToken": "1488ae0a935db457b5360f14821c407aba47e09501df2bd3ff330e4bcc5166fe"
+				},
+        "pengpeng":{
+          "secret": "SEC5727929ced894cae474de9a2572eb044f1bfae48597928f3410494a16b158928",
+          "accessToken":"f7a78faaef662186434a444d6281e90849c38879f44d4eb00c8de1e6fdb5d97a"
+        },
+        "mufasha":{
+          "secret": "SEC80fdf0444ec128ae9c9a1d058eeb17a660673427f0c68b6c721ba6081cbbc728",
+          "accessToken":"20f2e0c5720c097807f901da1e1fc5b796ec94ebdd1ddc6d2afb83777677142a"
+        },
+        "buzzLightyear":{
+          "secret": "SEC0d6763c70fee1faac8cb1dd6c12b2d7f7652106dec9f51a9635090bb5af42aca",
+          "accessToken":"17d3e8784f140966198fa403f912a6bc5c54143d3753370d26aa756c095ea624"
+        },
+        "diyago":{
+          "secret": "SEC0c57deeef5423ecfdfd203dc12ac16bce6d5c039c26796e7f994dd29334c4377",
+          "accessToken":"15ddab831e9f863ef822967735b088e3227ede04c43621c852ae415b2786886c"
+        },
+        "paidaxing":{
+          "secret": "SEC592da119a4395afce37300d1581cc1f73f87eb1cd82917c883a6250ae2361f56",
+          "accessToken":"bf554f6b0bb5a78c9283ea231a78b3fd6f7f16800128cad7504310ba6e9f93cf"
+        }
+			}
+		},
+		"myfavorites": [
+			"BTC-USDT"
+		]
+	},
+	"upstream": {
+		"redisLocal": {
+			"url": "127.0.0.1:6379",
+			"password": "",
+			"index": 3,
+			"description": ""
+		},
+		"redisLocal2": {
+			"url": "192.168.5.117:6379",
+			"password": "",
+			"index": 7,
+			"description": ""
+		},
+
+		"credential": {
+			"secretKey": "D6D74DF9DD60A25BE2B27CA71D8F814D",
+			"baseUrl": "aws.okx.com",
+			"okAccessKey": "fe468418-5e40-433f-8d04-04951286d417",
+			"okAccessPassphrase": "M4pw71Id"
+		},
+		"redisRemotes": {
+			"master": {
+				"url": "192.168.1.113:16379",
+				"password": "",
+				"index": 5,
+				"description": ""
+			},
+			"slave": {
+				"url": "localhost:36379",
+				"password": "",
+				"index": 5,
+				"description": ""
+			}
+		},
+		"threads": {
+			"asyncChannels": 20,
+			"maxLenTickerStream": 65536,
+			"bigTorque": {
+				"myFavorites": {
+					"m2": 0.02,
+					"m4": 0.03,
+					"m8": 0.04
+				},
+				"investigate": {
+					"m2": 0.05,
+					"m4": 0.06,
+					"m8": 0.07
+				}
+			}
+		},
+		"candleDimentions": [
+			"1m",
+			"3m",
+			"5m",
+			"15m",
+			"30m",
+			"1H",
+			"2H",
+			"4H",
+			"6H",
+			"12H",
+			"1D",
+			"2D",
+			"5D"
+		],
+		"softCandleSegmentList": [{
+		    "startTime": "2021-12-04 20:00.000",
+				"enabled": false,
+				"seg": "1m"
+			},
+      {
+		    "startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "3m"
+			},
+      {
+				"startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "5m"
+			},
+			{
+				"startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "15m"
+			},
+			{
+				"startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "30m"
+			},
+			{
+				"startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "1H"
+			},
+			{
+				"startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "2H"
+			},
+			{
+				"startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "4H"
+			},
+			{
+				"startTime": "2021-12-04 18:00.000",
+				"enabled": true,
+				"seg": "6H"
+			},
+			{
+				"startTime": "2021-12-04 12:00.000",
+				"enabled": true,
+				"seg": "12H"
+			},
+			{
+				"startTime": "2021-12-04 00:00.000",
+				"enabled": true,
+				"seg": "1D"
+			},
+			{
+				"startTime": "2021-12-04 00:00.000",
+				"enabled": true,
+				"seg": "2D"
+			},
+			{
+				"startTime": "2021-12-04 00:00.000",
+				"enabled": true,
+				"seg": "5D"
+			}
+		],
+		"dingding": {
+			"baseUrl": "https://oapi.dingtalk.com/robot/send",
+			"robots": {
+				"dingman": {
+					"secret": "SECb5a82adcbbbfdbabfb5e9e1c46a99eee4fc831dd1fba926610bd41e7ade94656",
+					"accessToken": "1488ae0a935db457b5360f14821c407aba47e09501df2bd3ff330e4bcc5166fe"
+				},
+        "pengpeng":{
+          "secret": "SEC5727929ced894cae474de9a2572eb044f1bfae48597928f3410494a16b158928",
+          "accessToken":"f7a78faaef662186434a444d6281e90849c38879f44d4eb00c8de1e6fdb5d97a"
+        },
+        "paidaxing":{
+          "secret": "SEC592da119a4395afce37300d1581cc1f73f87eb1cd82917c883a6250ae2361f56",
+          "accessToken":"bf554f6b0bb5a78c9283ea231a78b3fd6f7f16800128cad7504310ba6e9f93cf"
+        }
+			}
+		},
+		"myfavorites": [
+			"BTC-USDT"
+		]
+	},
+
+	"test": {
+		"redisLocal": {
+			"url": "127.0.0.1:6379",
+			"password": "",
+			"index": 3,
+			"description": ""
+		},
+		"redisLocal2": {
+			"url": "192.168.5.117:6379",
+			"password": "",
+			"index": 7,
+			"description": ""
+		},
+
+		"credential": {
+			"secretKey": "D6D74DF9DD60A25BE2B27CA71D8F814D",
+			"baseUrl": "aws.okx.com",
+			"okAccessKey": "fe468418-5e40-433f-8d04-04951286d417",
+			"okAccessPassphrase": "M4pw71Id"
+		},
+		"redisRemotes": {
+			"master": {
+				"url": "192.168.1.113:16379",
+				"password": "",
+				"index": 5,
+				"description": ""
+			},
+			"slave": {
+				"url": "localhost:36379",
+				"password": "",
+				"index": 5,
+				"description": ""
+			}
+		},
+		"threads": {
+			"asyncChannels": 20,
+			"maxLenTickerStream": 65536,
+			"bigTorque": {
+				"myFavorites": {
+					"m2": 0.02,
+					"m4": 0.03,
+					"m8": 0.04
+				},
+				"investigate": {
+					"m2": 0.05,
+					"m4": 0.06,
+					"m8": 0.07
+				}
+			}
+		},
+		"candleDimentions": [
+			"1m",
+			"3m",
+			"5m",
+			"15m",
+			"30m",
+			"1H",
+			"2H",
+			"4H",
+			"6H",
+			"12H",
+			"1D",
+			"2D",
+			"5D"
+		],
+		"softCandleSegmentList": [{
+		    "startTime": "2021-12-04 20:00.000",
+				"enabled": false,
+				"seg": "1m"
+			},
+      {
+		    "startTime": "2021-12-04 20:00.000",
+				"enabled": false,
+				"seg": "3m"
+			},
+      {
+				"startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "5m"
+			},
+			{
+				"startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "15m"
+			},
+			{
+				"startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "30m"
+			},
+			{
+				"startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "1H"
+			},
+			{
+				"startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "2H"
+			},
+			{
+				"startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "4H"
+			},
+			{
+				"startTime": "2021-12-04 18:00.000",
+				"enabled": true,
+				"seg": "6H"
+			},
+			{
+				"startTime": "2021-12-04 12:00.000",
+				"enabled": true,
+				"seg": "12H"
+			},
+			{
+				"startTime": "2021-12-04 00:00.000",
+				"enabled": true,
+				"seg": "1D"
+			},
+			{
+				"startTime": "2021-12-04 00:00.000",
+				"enabled": true,
+				"seg": "2D"
+			},
+			{
+				"startTime": "2021-12-04 00:00.000",
+				"enabled": true,
+				"seg": "5D"
+			}
+		],
+		"dingding": {
+			"baseUrl": "https://oapi.dingtalk.com/robot/send",
+			"robots": {
+				"dingman": {
+					"secret": "SECb5a82adcbbbfdbabfb5e9e1c46a99eee4fc831dd1fba926610bd41e7ade94656",
+					"accessToken": "1488ae0a935db457b5360f14821c407aba47e09501df2bd3ff330e4bcc5166fe"
+				},
+        "pengpeng":{
+          "secret": "SEC5727929ced894cae474de9a2572eb044f1bfae48597928f3410494a16b158928",
+          "accessToken":"f7a78faaef662186434a444d6281e90849c38879f44d4eb00c8de1e6fdb5d97a"
+        },
+        "paidaxing":{
+          "secret": "SEC592da119a4395afce37300d1581cc1f73f87eb1cd82917c883a6250ae2361f56",
+          "accessToken":"bf554f6b0bb5a78c9283ea231a78b3fd6f7f16800128cad7504310ba6e9f93cf"
+        }
+			}
+		},
+		"myfavorites": [
+			"BTC-USDT"
+		]
+	},
+	"development": {
+		"redisLocal": {
+			"url": "192.168.2.234:6379",
+			"password": "",
+			"index": 3,
+			"description": ""
+		},
+		"credential": {
+			"secretKey": "D6D74DF9DD60A25BE2B27CA71D8F814D",
+			"baseUrl": "aws.okx.com",
+			"okAccessKey": "fe468418-5e40-433f-8d04-04951286d417",
+			"okAccessPassphrase": "M4pw71Id"
+		},
+		"redisRemotes": {
+			"master": {
+				"url": "192.168.1.113:16379",
+				"password": "",
+				"index": 5,
+				"description": ""
+			},
+			"slave": {
+				"url": "localhost:36379",
+				"password": "",
+				"index": 5,
+				"description": ""
+			}
+		},
+		"threads": {
+			"asyncChannels": 20,
+			"maxLenTickerStream": 65536,
+			"bigTorque": {
+				"myFavorites": {
+					"m2": 0.02,
+					"m4": 0.03,
+					"m8": 0.04
+				},
+				"investigate": {
+					"m2": 0.05,
+					"m4": 0.06,
+					"m8": 0.07
+				}
+			}
+		},
+		"candleDimentions": [
+			"1m",
+			"3m",
+			"5m",
+			"15m",
+			"30m",
+			"1H",
+			"2H",
+			"4H",
+			"6H",
+			"12H",
+			"1D",
+			"2D",
+			"5D"
+		],
+		"softCandleSegmentList": [{
+		    "startTime": "2021-12-04 20:00.000",
+				"enabled": false,
+				"seg": "1m"
+			},
+      {
+		    "startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "3m"
+			},
+      {
+				"startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "5m"
+			},
+			{
+				"startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "15m"
+			},
+			{
+				"startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "30m"
+			},
+			{
+				"startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "1H"
+			},
+			{
+				"startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "2H"
+			},
+			{
+				"startTime": "2021-12-04 20:00.000",
+				"enabled": true,
+				"seg": "4H"
+			},
+			{
+				"startTime": "2021-12-04 18:00.000",
+				"enabled": true,
+				"seg": "6H"
+			},
+			{
+				"startTime": "2021-12-04 12:00.000",
+				"enabled": true,
+				"seg": "12H"
+			},
+			{
+				"startTime": "2021-12-04 00:00.000",
+				"enabled": true,
+				"seg": "1D"
+			},
+			{
+				"startTime": "2021-12-04 00:00.000",
+				"enabled": true,
+				"seg": "2D"
+			},
+			{
+				"startTime": "2021-12-04 00:00.000",
+				"enabled": true,
+				"seg": "5D"
+			}
+		],
+		"dingding": {
+			"baseUrl": "https://oapi.dingtalk.com/robot/send",
+			"robots": {
+				"dingman": {
+					"secret": "SECb5a82adcbbbfdbabfb5e9e1c46a99eee4fc831dd1fba926610bd41e7ade94656",
+					"accessToken": "1488ae0a935db457b5360f14821c407aba47e09501df2bd3ff330e4bcc5166fe"
+				},
+        "paidaxing":{
+          "secret": "SEC592da119a4395afce37300d1581cc1f73f87eb1cd82917c883a6250ae2361f56",
+          "accessToken":"bf554f6b0bb5a78c9283ea231a78b3fd6f7f16800128cad7504310ba6e9f93cf"
+        },
+        "pengpeng":{
+          "secret": "SEC5727929ced894cae474de9a2572eb044f1bfae48597928f3410494a16b158928",
+          "accessToken":"f7a78faaef662186434a444d6281e90849c38879f44d4eb00c8de1e6fdb5d97a"
+        }
+      }
+		},
+		"myfavorites": [
+			"BTC-USDT"
+		]
+	}
+}

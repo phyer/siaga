@@ -5,85 +5,50 @@ import (
 	"os"
 	"time"
 
+	"github.com/phyer/core"
+	md "github.com/phyer/siaga/module"
 	"github.com/sirupsen/logrus"
-	"phyer.click/sardine/core"
 )
 
 func main() {
 	cr := core.Core{}
 	cr.Init()
 
-	remoteList, err := core.GetRemoteRedisConfigList()
-	if err != nil {
-		logrus.Panic("GetRemoteRedisConfigList err: ", err)
-	}
-	founded := false
-	for k, v := range remoteList {
-		cliOk := false
-		cli, err := cr.GetRedisRemoteCli(v)
-		if err != nil {
-			logrus.Warning("GetRedisCli err: ", err)
-		}
-		pong, err := cli.Ping().Result()
-		if pong == "PONG" && err == nil {
-			cliOk = true
-		} else {
-			fmt.Println("redis", k, "状态不可用:", err)
-		}
-		if !cliOk {
-			continue
-		}
-		fmt.Println("redis", k, "状态可用:", err)
-		founded = true
-		cr.RedisRemoteCli = cli
+	cli, err := cr.GetRedisCli()
+	cr.RedisRemoteCli = cli
 
-		allCandleAdd := core.ALLCANDLES_PUBLISH
-		allMaXAdd := core.ALLMAX_PUBLISH
-		ce := v.ChannelPreName
-		if len(ce) > 0 {
-			allCandleAdd = ce + "|" + allCandleAdd
-			allMaXAdd = ce + "|" + allMaXAdd
+	allCandleAdd := core.ALLCANDLES_PUBLISH
+	allMaXAdd := core.ALLMAX_PUBLISH
+	// 目前只有phyer里部署的tunas会发布tickerInfo信息
+	go func(vv *core.RedisConfig) {
+		allowed := os.Getenv("SIAGA_ACCEPTTICKER") == "true"
+		if !allowed {
+			return
 		}
-		// 目前只有phyer里部署的tunas会发布tickerInfo信息
-		go func(vv *core.RedisConfig) {
-			allowed := os.Getenv("SARDINE_ACCEPTTICKER") == "true"
-			if !allowed {
-				return
-			}
-			core.LoopSubscribe(&cr, core.TICKERINFO_PUBLISH, vv)
-		}(v)
-		time.Sleep(5 * time.Second)
-		go func(vv *core.RedisConfig) {
-			allowed := os.Getenv("SARDINE_ACCEPTCANDLE") == "true"
-			if !allowed {
-				return
-			}
-			core.LoopSubscribe(&cr, allCandleAdd, vv)
-		}(v)
-		go func(vv *core.RedisConfig) {
-			allowed := os.Getenv("SARDINE_ACCEPTMAX") == "true"
-			if !allowed {
-				return
-			}
-			core.LoopSubscribe(&cr, allMaXAdd, vv)
-		}(v)
-		go func(vv *core.RedisConfig) {
-			allowed := os.Getenv("SARDINE_ACCEPTSERIES") == "true"
-			if !allowed {
-				return
-			}
-			core.LoopSubscribe(&cr, core.ALLSERIESINFO_PUBLISH, vv)
-		}(v)
-		//----------------------
-		go func(vv *core.RedisConfig) {
-			// core.(&cr, core.ALLSERIESINFO_PUBLISH, vv)
-			core.InvokeRestQueue(&cr, vv)
-		}(v)
-		break
-	}
-	if !founded {
-		logrus.Panic("no remote redis connected")
-	}
+		md.LoopSubscribe(&cr, core.TICKERINFO_PUBLISH, vv)
+	}(v)
+	time.Sleep(5 * time.Second)
+	go func(vv *core.RedisConfig) {
+		allowed := os.Getenv("SIAGA_ACCEPTCANDLE") == "true"
+		if !allowed {
+			return
+		}
+		// core.LoopSubscribe(&cr, allCandleAdd, vv)
+	}(v)
+	go func(vv *core.RedisConfig) {
+		allowed := os.Getenv("SIAGA_ACCEPTMAX") == "true"
+		if !allowed {
+			return
+		}
+		core.LoopSubscribe(&cr, allMaXAdd, vv)
+	}(v)
+	go func(vv *core.RedisConfig) {
+		allowed := os.Getenv("SIAGA_ACCEPTSERIES") == "true"
+		if !allowed {
+			return
+		}
+		core.LoopSubscribe(&cr, core.ALLSERIESINFO_PUBLISH, vv)
+	}(v)
 
 	go func() {
 		core.LoopMakeMaX(&cr)

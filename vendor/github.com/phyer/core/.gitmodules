@@ -1,0 +1,3 @@
+[submodule "submodule/okex"]
+	path = submodule/okex
+	url = baidu:/root/repos/go/okexV5Api
