@@ -30,7 +30,7 @@ func (mmx *MyMaX) Process(cr *core.Core) {
 	}
 	// TODO
 	go func() {
-		torqueSorted := os.Getenv("SARDINE_MAKESERIES") == "true"
+		torqueSorted := os.Getenv("SIAGA_MAKESERIES") == "true"
 		if !torqueSorted {
 			return
 		}

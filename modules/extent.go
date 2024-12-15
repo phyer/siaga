@@ -19,15 +19,15 @@ import (
 
 func GetRemoteRedisConfigList() ([]*core.RedisConfig, error) {
 	list := []*core.RedisConfig{}
-	envListStr := os.Getenv("SARDINE_REMOTE_REDIS_LIST")
+	envListStr := os.Getenv("SIAGA_UPSTREAM_REDIS_LIST")
 	envList := strings.Split(envListStr, "|")
 	for _, v := range envList {
 		if len(v) == 0 {
 			continue
 		}
-		urlstr := core.REMOTE_REDIS_PRE_NAME + v + "_URL"
-		indexstr := core.REMOTE_REDIS_PRE_NAME + v + "_INDEX"
-		password := os.Getenv(core.REMOTE_REDIS_PRE_NAME + v + "_PASSWORD")
+		urlstr := "SIAGA_UPSTREAM_REDIS_" + v + "_URL"
+		indexstr := "SIAGA_UPSTREAM_REDIS_" + v + "_INDEX"
+		password := os.Getenv("SIAGA_UPSTREAM_REDIS_" + v + "_PASSWORD")
 		// channelstr := core.REMOTE_REDIS_PRE_NAME + v + "_CHANNEL_PRENAME"
 		// channelPreName := os.Getenv(channelstr)
 		url := os.Getenv(urlstr)
