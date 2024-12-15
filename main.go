@@ -1,24 +1,23 @@
 package main
 
 import (
-	"fmt"
+	// "fmt"
 	"os"
 	"time"
 
 	"github.com/phyer/core"
-	md "github.com/phyer/siaga/module"
-	"github.com/sirupsen/logrus"
+	md "github.com/phyer/siaga/modules"
+	// "github.com/sirupsen/logrus"
 )
 
 func main() {
 	cr := core.Core{}
 	cr.Init()
 
-	cli, err := cr.GetRedisCli()
+	cli, _ := cr.GetRedisLocalCli()
 	cr.RedisRemoteCli = cli
 
-	allCandleAdd := core.ALLCANDLES_PUBLISH
-	allMaXAdd := core.ALLMAX_PUBLISH
+	rdsLs, _ := md.GetRemoteRedisConfigList()
 	// 目前只有phyer里部署的tunas会发布tickerInfo信息
 	go func(vv *core.RedisConfig) {
 		allowed := os.Getenv("SIAGA_ACCEPTTICKER") == "true"
@@ -26,57 +25,61 @@ func main() {
 			return
 		}
 		md.LoopSubscribe(&cr, core.TICKERINFO_PUBLISH, vv)
-	}(v)
+	}(rdsLs[0])
 	time.Sleep(5 * time.Second)
 	go func(vv *core.RedisConfig) {
 		allowed := os.Getenv("SIAGA_ACCEPTCANDLE") == "true"
 		if !allowed {
 			return
 		}
-		// core.LoopSubscribe(&cr, allCandleAdd, vv)
-	}(v)
+		md.LoopSubscribe(&cr, core.ALLCANDLES_PUBLISH, vv)
+	}(rdsLs[0])
 	go func(vv *core.RedisConfig) {
 		allowed := os.Getenv("SIAGA_ACCEPTMAX") == "true"
 		if !allowed {
 			return
 		}
-		core.LoopSubscribe(&cr, allMaXAdd, vv)
-	}(v)
+		md.LoopSubscribe(&cr, core.ALLMAXES_PUBLISH, vv)
+	}(rdsLs[0])
+	// 下面这个暂时不运行, 在环境变量里把它关掉
 	go func(vv *core.RedisConfig) {
 		allowed := os.Getenv("SIAGA_ACCEPTSERIES") == "true"
 		if !allowed {
 			return
 		}
-		core.LoopSubscribe(&cr, core.ALLSERIESINFO_PUBLISH, vv)
-	}(v)
+		md.LoopSubscribe(&cr, core.ALLSERIESINFO_PUBLISH, vv)
+	}(rdsLs[0])
 
 	go func() {
-		core.LoopMakeMaX(&cr)
+		md.LoopMakeMaX(&cr)
 	}()
+	// 这些临时关掉，很快打开
+	// go func() {
+	// 	core.LoopCheckRemoteRedis(&cr)
+	// }()
 	go func() {
-		core.LoopCheckRemoteRedis(&cr)
+		md.CandlesProcess(&cr)
 	}()
-	go func() {
-		core.CandlesProcess(&cr)
-	}()
-	go func() {
-		core.MaXsProcess(&cr)
-	}()
-	go func() {
-		core.TickerInfoProcess(&cr)
-	}()
-	go func() {
-		core.CoasterProcess(&cr)
-	}()
-	go func() {
-		core.SeriesProcess(&cr)
-	}()
-	go func() {
-		core.SegmentItemProcess(&cr)
-	}()
-	go func() {
-		core.ShearForceProcess(&cr)
-	}()
+	// go func() {
+	// 	core.MaXsProcess(&cr)
+	// }()
+	// go func() {
+	// 	core.TickerInfoProcess(&cr)
+	// }()
+
+	// 这些暂时不运行, 以后要不要运行再说
+	// go func() {
+	// 	core.CoasterProcess(&cr)
+	// }()
+	// go func() {
+	// 	core.SeriesProcess(&cr)
+	// }()
+	// go func() {
+	// 	core.SegmentItemProcess(&cr)
+	// }()
+	// go func() {
+	// 	core.ShearForceProcess(&cr)
+	// }()
 	go func() {
 		core.WriteLogProcess(&cr)
 	}()
