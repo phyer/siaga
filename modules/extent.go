@@ -152,7 +152,7 @@ func LoopMakeMaX(cr *core.Core) {
 			// sz := utils.ShaiziInt(1500) + 500
 			time.Sleep(time.Duration(30) * time.Millisecond)
 			err, ct := MakeMaX(cr, cad, 7)
-			logrus.Warn(GetFuncName(), " ma7 err:", err, " ct:", ct, " cd.InstID:", cd.InstId, " cd.Period:", cd.Period)
+			logrus.Warn(GetFuncName(), " ma7 err:", err, " ct:", ct, " cd.InstID:", cd.InstID, " cd.Period:", cd.Period)
 			//TODO 这个思路不错，单行不通，远程redis禁不住这么频繁的请求
 			// cd.InvokeRestQFromRemote(cr, ct)
 		}(cd)
@@ -161,7 +161,7 @@ func LoopMakeMaX(cr *core.Core) {
 			// sz := utils.ShaiziInt(2000) + 500
 			time.Sleep(time.Duration(30) * time.Millisecond)
 			err, ct := MakeMaX(cr, cad, 30)
-			logrus.Warn(GetFuncName(), " ma30 err:", err, " ct:", ct, " cd.InstID:", cd.InstId, " cd.Period:", cd.Period)
+			logrus.Warn(GetFuncName(), " ma30 err:", err, " ct:", ct, " cd.InstID:", cd.InstID, " cd.Period:", cd.Period)
 			// cd.InvokeRestQFromRemote(cr, ct)
 		}(cd)
 		// TODO TODO 这地方不能加延时，否则makeMax处理不过来，多的就丢弃了，造成maX的sortedSet比candle的短很多。后面所有依赖的逻辑都受影响.
@@ -266,13 +266,13 @@ func MakeMaX(cr *core.Core, cl *core.Candle, count int) (error, int) {
 	// tsa := time.UnixMilli(tsi).Format("01-02 15:03:04")
 	// fmt.Println("MakeMaX candle: ", cl.InstID, cl.Period, tsa, cl.From)
 	tss := strconv.FormatInt(tsi, 10)
-	keyName := "candle" + cl.Period + "|" + cl.InstId + "|ts:" + tss
+	keyName := "candle" + cl.Period + "|" + cl.InstID + "|ts:" + tss
 	//过期时间：根号(当前candle的周期/1分钟)*10000
 
 	lastTime := time.UnixMilli(tsi)
 	// lasts := lastTime.Format("2006-01-02 15:04")
 	// 以当前candle的时间戳为起点倒推count个周期，取得所需candle用于计算maX
-	setName := "candle" + cl.Period + "|" + cl.InstId + "|sortedSet"
+	setName := "candle" + cl.Period + "|" + cl.InstID + "|sortedSet"
 	// cdl, err := cr.GetLastCandleListOfCoin(cl.InstID, cl.Period, count, lastTime)
 	cdl, err := GetRangeCandleSortedSet(cr, setName, count, lastTime)
 	if err != nil {
@@ -310,7 +310,7 @@ func MakeMaX(cr *core.Core, cl *core.Candle, count int) (error, int) {
 	}
 	mx := core.MaX{
 		KeyName: keyName,
-		InstID:  cl.InstId,
+		InstID:  cl.InstID,
 		Period:  cl.Period,
 		From:    cl.From,
 		Count:   count,
@@ -349,7 +349,7 @@ func CandlesProcess(cr *core.Core) {
 // "count": 1
 // },
 // 从startTime开始，经历整数个(count * seg)之后，还能不大于分钟粒度的当前时间的话，那个时间点就是最近的当前段起始时间点
-func MakeSoftCandles(cr *core.Core, cd *core.Candle) {
+func MakeSoftCandles(cr *core.Core, mcd *MyCandle) {
 	segments := cr.Cfg.Config.Get("softCandleSegmentList").MustArray()
 	for k, v := range segments {
 		cs := core.CandleSegment{}
@@ -362,7 +362,7 @@ func MakeSoftCandles(cr *core.Core, cd *core.Candle) {
 			continue
 		}
 		// TODO: 通过序列化和反序列化，对原始的candle进行克隆，因为是对引用进行操作，所以每个seg里对candle进行操作都会改变原始对象，这和预期不符
-		bt, _ := json.Marshal(cd)
+		bt, _ := json.Marshal(mcd.Candle)
 		cd0 := core.Candle{}
 		json.Unmarshal(bt, &cd0)
 
@@ -384,7 +384,7 @@ func MakeSoftCandles(cr *core.Core, cd *core.Candle) {
 		}
 		otmi := otm.UnixMilli()
 		cd1 := core.Candle{
-			InstId: cd0.InstId,                      // string        `json:"instId", string`
+			InstID: cd0.InstID,                      // string        `json:"instId", string`
 			Period: cs.Seg,                          //   `json:"period", string`
 			Data:   cd0.Data,                        //  `json:"data"`
 			From:   "soft|" + os.Getenv("HOSTNAME"), //  string        `json:"from"`
@@ -392,11 +392,40 @@ func MakeSoftCandles(cr *core.Core, cd *core.Candle) {
 		// cd0是从tickerInfo创建的1m Candle克隆来的, Data里只有Data[4]被赋值，是last，其他都是"-1"
 		// TODO 填充其余几个未赋值的字段，除了成交量和成交美元数以外，并存入redis待用
 		// strconv.FormatInt(otmi, 10)
-		cd1.Data = cd0.GetSetCandleInfo(cr, cs.Seg, otmi)
+		mcd := MyCandle{
+			Candle: cd0,
+		}
+		cd1.Data = mcd.GetSetCandleInfo(cr, cs.Seg, otmi)
 		// 生成软交易量和交易数对,用于代替last生成max
 		go func(k int) {
 			time.Sleep(time.Duration(100*k) * time.Millisecond)
 			cr.CandlesProcessChan <- &cd1
 		}(k)
+	}
+}
+
+func MaXsProcess(cr *core.Core) {
+	for {
+		mx := <-cr.MaXProcessChan
+		logrus.Debug("mx: ", mx)
+		go func(maX *core.MaX) {
+			mmx := MyMaX{
+				MaX: *mx,
+			}
+			mmx.Process(cr)
+		}(mx)
+	}
+}
+
+func TickerInfoProcess(cr *core.Core) {
+	for {
+		ti := <-cr.TickerInforocessChan
+		logrus.Debug("ti: ", ti)
+		go func(ti *core.TickerInfo) {
+			mti := MyTickerInfo{
+				TickerInfo: *ti,
+			}
+			mti.Process(cr)
+		}(ti)
 	}
 }

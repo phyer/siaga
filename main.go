@@ -60,12 +60,12 @@ func main() {
 	go func() {
 		md.CandlesProcess(&cr)
 	}()
-	// go func() {
-	// 	core.MaXsProcess(&cr)
-	// }()
-	// go func() {
-	// 	core.TickerInfoProcess(&cr)
-	// }()
+	go func() {
+		md.MaXsProcess(&cr)
+	}()
+	go func() {
+		md.TickerInfoProcess(&cr)
+	}()
 
 	// 这些暂时不运行, 以后要不要运行再说
 	// go func() {
