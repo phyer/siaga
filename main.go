@@ -30,34 +30,34 @@ func main() {
 		md.LoopSubscribe(&cr, core.TICKERINFO_PUBLISH, vv)
 	}(rdsLs[0])
 
-	// 订阅 redis Candles
-	go func(vv *core.RedisConfig) {
-		allowed := os.Getenv("SIAGA_ACCEPTCANDLE") == "true"
-		if !allowed {
-			return
-		}
-		fmt.Println("start subscribe core.TICKERINFO_PUBLISH")
-		md.LoopSubscribe(&cr, core.ALLCANDLES_PUBLISH, vv)
-	}(rdsLs[0])
-
-	// 订阅 redis Max
-	go func(vv *core.RedisConfig) {
-		allowed := os.Getenv("SIAGA_ACCEPTMAX") == "true"
-		if !allowed {
-			return
-		}
-		md.LoopSubscribe(&cr, core.ALLMAXES_PUBLISH, vv)
-	}(rdsLs[0])
-
-	// 下面这个暂时不运行, 在环境变量里把它关掉
-	go func(vv *core.RedisConfig) {
-		allowed := os.Getenv("SIAGA_ACCEPTSERIES") == "true"
-		if !allowed {
-			return
-		}
-		md.LoopSubscribe(&cr, core.ALLSERIESINFO_PUBLISH, vv)
-	}(rdsLs[0])
-
+	// // 订阅 redis Candles
+	// go func(vv *core.RedisConfig) {
+	// 	allowed := os.Getenv("SIAGA_ACCEPTCANDLE") == "true"
+	// 	if !allowed {
+	// 		return
+	// 	}
+	// 	fmt.Println("start subscribe core.TICKERINFO_PUBLISH")
+	// 	md.LoopSubscribe(&cr, core.ALLCANDLES_PUBLISH, vv)
+	// }(rdsLs[0])
+	//
+	// // 订阅 redis Max
+	// go func(vv *core.RedisConfig) {
+	// 	allowed := os.Getenv("SIAGA_ACCEPTMAX") == "true"
+	// 	if !allowed {
+	// 		return
+	// 	}
+	// 	md.LoopSubscribe(&cr, core.ALLMAXES_PUBLISH, vv)
+	// }(rdsLs[0])
+	//
+	// // 下面这个暂时不运行, 在环境变量里把它关掉
+	// go func(vv *core.RedisConfig) {
+	// 	allowed := os.Getenv("SIAGA_ACCEPTSERIES") == "true"
+	// 	if !allowed {
+	// 		return
+	// 	}
+	// 	md.LoopSubscribe(&cr, core.ALLSERIESINFO_PUBLISH, vv)
+	// }(rdsLs[0])
+	//
 	go func() {
 		md.TickerInfoProcess(&cr)
 	}()
