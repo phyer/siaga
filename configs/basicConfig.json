@@ -153,7 +153,7 @@
 		},
 		"redisRemotes": {
 			"master": {
-				"url": "fluentd.k8s.xunlang.home:6379",
+				"url": "this Set is abandend, use env insted",
 				"password": "",
 				"index": 5,
 				"description": ""
