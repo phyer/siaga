@@ -52,7 +52,7 @@ func GetRemoteRedisConfigList() ([]*core.RedisConfig, error) {
 }
 
 func LoopSubscribe(cr *core.Core, channelName string, redisConf *core.RedisConfig) {
-	redisRemoteCli := cr.RedisRemoteCli
+	redisRemoteCli, _ := cr.GetRedisCliFromConf(*redisConf)
 	suffix := ""
 	env := os.Getenv("GO_ENV")
 	if strings.Contains(env, "demoEnv") {
@@ -77,7 +77,7 @@ func LoopSubscribe(cr *core.Core, channelName string, redisConf *core.RedisConfi
 		ctype := ""
 		if strings.Contains(channelName, "allCandle") {
 			ctype = "candle"
-		} else if strings.Contains(channelName, "allMaXs") {
+		} else if strings.Contains(channelName, "allMaX") {
 			ctype = "maX"
 		} else if strings.Contains(channelName, "ticker") {
 			ctype = "tickerInfo"
