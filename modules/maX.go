@@ -29,7 +29,7 @@ func (mmx *MyMaX) Process(cr *core.Core) {
 		return
 	}
 	go func() {
-		// mx.PushToWriteLogChan(cr)
+		mx.PushToWriteLogChan(cr)
 	}()
 	// TODO
 	go func() {
