@@ -26,6 +26,7 @@ func main() {
 		if !allowed {
 			return
 		}
+		fmt.Println("start subscribe core.TICKERINFO_PUBLISH")
 		md.LoopSubscribe(&cr, core.TICKERINFO_PUBLISH, vv)
 	}(rdsLs[0])
 
@@ -35,6 +36,7 @@ func main() {
 		if !allowed {
 			return
 		}
+		fmt.Println("start subscribe core.TICKERINFO_PUBLISH")
 		md.LoopSubscribe(&cr, core.ALLCANDLES_PUBLISH, vv)
 	}(rdsLs[0])
 
