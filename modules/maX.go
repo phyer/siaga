@@ -28,6 +28,9 @@ func (mmx *MyMaX) Process(cr *core.Core) {
 		fmt.Println("max SetToKey err: ", err)
 		return
 	}
+	go func() {
+		// mx.PushToWriteLogChan(cr)
+	}()
 	// TODO
 	go func() {
 		torqueSorted := os.Getenv("SIAGA_MAKESERIES") == "true"

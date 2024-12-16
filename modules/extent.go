@@ -93,6 +93,7 @@ func LoopSubscribe(cr *core.Core, channelName string, redisConf *core.RedisConfi
 		// logrus.Warning("msg.Payload: ", msg.Payload)
 		// fmt.Println("channelName: ", channelName, " msg.Payload: ", msg.Payload)
 		switch ctype {
+		// 接收到的candle扔到 candle 二次加工流水线
 		case "candle":
 			{
 				cd := core.Candle{}
@@ -104,6 +105,8 @@ func LoopSubscribe(cr *core.Core, channelName string, redisConf *core.RedisConfi
 				cr.CandlesProcessChan <- &cd
 				break
 			}
+
+		// 接收到的maX扔到 maX 二次加工流水线
 		case "maX":
 			{
 				mx := core.MaX{}
@@ -118,6 +121,8 @@ func LoopSubscribe(cr *core.Core, channelName string, redisConf *core.RedisConfi
 				cr.MaXProcessChan <- &mx
 				break
 			}
+
+		// 接收到的tinckerInfo扔到 tickerInfo 二次加工流水线
 		case "tickerInfo":
 			{
 				//tickerInfo:  map[askPx:2.2164 askSz:17.109531 bidPx:2.2136 bidSz:73 high24h:2.497 instId:STX-USDT instType:SPOT last:2.2136 lastSz:0 low24h:2.0508 open24h:2.42 sodUtc0:2.4266 sodUtc8:2.4224 ts:1637077323552 vol24h:5355479.488179 :12247398.975501]
@@ -317,6 +322,7 @@ func MakeMaX(cr *core.Core, cl *core.Candle, count int) (error, int) {
 		Ts:      tsi,
 		AvgVal:  avgLast,
 	}
+	// MaX的Data里包含三个有效信息：时间戳，平均值，计算平均值所采用的数列长度
 	dt := []interface{}{}
 	dt = append(dt, mx.Ts)
 	dt = append(dt, mx.AvgVal)

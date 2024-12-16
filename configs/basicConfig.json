@@ -153,17 +153,11 @@
 		},
 		"redisRemotes": {
 			"master": {
-				"url": "localhost:16379",
+				"url": "fluentd.k8s.xunlang.home:6379",
 				"password": "",
 				"index": 5,
 				"description": ""
 			},
-			"slave": {
-				"url": "localhost:16379",
-				"password": "",
-				"index": 5,
-				"description": ""
-			}
 		},
 		"threads": {
 			"asyncChannels": 20,
@@ -202,7 +196,6 @@
       "OKB-USDT",
       "DOGE-USDT",
       "SOL-USDT",
-      "XRP-USDT",
       "DYDX-USDT"
     ],
 		"softCandleSegmentList": [{

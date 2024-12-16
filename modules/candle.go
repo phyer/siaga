@@ -38,6 +38,10 @@ func (cd *MyCandle) Process(cr *core.Core) {
 				logrus.Warning("SetToKey err: ", err)
 			}
 		}
+		// 对于软candle，推到elasticSearch
+		if strings.HasPrefix(cd.From, "soft") {
+			cd.PushToWriteLogChan(cr)
+		}
 	}()
 	// TODO update plate and coaster
 	go func() {

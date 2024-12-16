@@ -19,6 +19,8 @@ func main() {
 
 	rdsLs, _ := md.GetRemoteRedisConfigList()
 	// 目前只有phyer里部署的tunas会发布tickerInfo信息
+
+	// 订阅 redis TickerInfo
 	go func(vv *core.RedisConfig) {
 		allowed := os.Getenv("SIAGA_ACCEPTTICKER") == "true"
 		if !allowed {
@@ -26,7 +28,8 @@ func main() {
 		}
 		md.LoopSubscribe(&cr, core.TICKERINFO_PUBLISH, vv)
 	}(rdsLs[0])
-	time.Sleep(5 * time.Second)
+
+	// 订阅 redis Candles
 	go func(vv *core.RedisConfig) {
 		allowed := os.Getenv("SIAGA_ACCEPTCANDLE") == "true"
 		if !allowed {
@@ -34,6 +37,8 @@ func main() {
 		}
 		md.LoopSubscribe(&cr, core.ALLCANDLES_PUBLISH, vv)
 	}(rdsLs[0])
+
+	// 订阅 redis Max
 	go func(vv *core.RedisConfig) {
 		allowed := os.Getenv("SIAGA_ACCEPTMAX") == "true"
 		if !allowed {
@@ -41,6 +46,7 @@ func main() {
 		}
 		md.LoopSubscribe(&cr, core.ALLMAXES_PUBLISH, vv)
 	}(rdsLs[0])
+
 	// 下面这个暂时不运行, 在环境变量里把它关掉
 	go func(vv *core.RedisConfig) {
 		allowed := os.Getenv("SIAGA_ACCEPTSERIES") == "true"
@@ -51,20 +57,16 @@ func main() {
 	}(rdsLs[0])
 
 	go func() {
-		md.LoopMakeMaX(&cr)
+		md.TickerInfoProcess(&cr)
 	}()
-	// 这些临时关掉，很快打开
-	// go func() {
-	// 	core.LoopCheckRemoteRedis(&cr)
-	// }()
 	go func() {
 		md.CandlesProcess(&cr)
 	}()
 	go func() {
-		md.MaXsProcess(&cr)
+		md.LoopMakeMaX(&cr)
 	}()
 	go func() {
-		md.TickerInfoProcess(&cr)
+		md.MaXsProcess(&cr)
 	}()
 
 	// 这些暂时不运行, 以后要不要运行再说
