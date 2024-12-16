@@ -18,6 +18,7 @@ func main() {
 
 	rdsLs, _ := md.GetRemoteRedisConfigList()
 	// 目前只有phyer里部署的tunas会发布tickerInfo信息
+	fmt.Println("len of rdsLs: ", len(rdsLs))
 
 	// 订阅 redis TickerInfo
 	go func(vv *core.RedisConfig) {
