@@ -1,9 +1,8 @@
 package main
 
 import (
-	// "fmt"
+	"fmt"
 	"os"
-	"time"
 
 	"github.com/phyer/core"
 	md "github.com/phyer/siaga/modules"
@@ -91,6 +90,6 @@ func main() {
 	// }
 	// allMaxs: {1634413398759-0 map[ma7|candle5m|LUNA-USDT|key:{"ts":1634412300000,"value":36.906796182686605}]}
 	// allCandles: {1634413398859-0 map[candle2H|XRP-USDT|key:{"channel":"candle2H","data":"eyJjIjoxLjExNzk1LCJmcm9tIjoicmVzdCIsImgiOjEuMTIyNzksImwiOjEuMTA4ODUsIm8iOjEuMTE3MzUsInRzIjoxNjM0MjkyMDAwMDAwLCJ2b2wiOjUwMDc5OTEuNDM5MDg1LCJ2b2xDY3kiOjU1OTE2MjUuNzI4NDc2fQ==","instId":"XRP-USDT"}]}
-
-	time.Sleep(1000000 * time.Hour)
+	fmt.Println("siaga started")
+	select {}
 }
