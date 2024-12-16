@@ -157,7 +157,7 @@
 				"password": "",
 				"index": 5,
 				"description": ""
-			},
+			}
 		},
 		"threads": {
 			"asyncChannels": 20,
