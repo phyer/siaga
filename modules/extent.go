@@ -90,8 +90,8 @@ func LoopSubscribe(cr *core.Core, channelName string, redisConf *core.RedisConfi
 		} else {
 			logrus.Warning("channelname not match", channelName)
 		}
-		// logrus.Warning("msg.Payload: ", msg.Payload)
-		// fmt.Println("channelName: ", channelName, " msg.Payload: ", msg.Payload)
+		logrus.Warning("msg.Payload: ", msg.Payload)
+		fmt.Println("channelName: ", channelName, " msg.Payload: ", msg.Payload)
 		switch ctype {
 		// 接收到的candle扔到 candle 二次加工流水线
 		case "candle":
