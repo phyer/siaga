@@ -103,7 +103,6 @@ func LoopSubscribe(cr *core.Core, channelName string, redisConf *core.RedisConfi
 					break
 				}
 				cr.CandlesProcessChan <- &cd
-				continue
 			}
 
 		// 接收到的maX扔到 maX 二次加工流水线
@@ -119,7 +118,6 @@ func LoopSubscribe(cr *core.Core, channelName string, redisConf *core.RedisConfi
 				dt = append(dt, mx.AvgVal)
 				mx.Data = dt
 				cr.MaXProcessChan <- &mx
-				continue
 			}
 
 		// 接收到的tinckerInfo扔到 tickerInfo 二次加工流水线
@@ -132,7 +130,6 @@ func LoopSubscribe(cr *core.Core, channelName string, redisConf *core.RedisConfi
 					logrus.Warning("tickerInfo payload unmarshal err: ", err, msg.Payload)
 				}
 				cr.TickerInforocessChan <- &ti
-				continue
 			}
 			// case "seriesInfo":
 			// 	{
