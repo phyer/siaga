@@ -12,7 +12,7 @@ import (
 func main() {
 	cr := core.Core{}
 	cr.Init()
-
+	cr.TickerInforocessChan = make(chan *core.TickerInfo)
 	cli, _ := cr.GetRedisLocalCli()
 	cr.RedisRemoteCli = cli
 
