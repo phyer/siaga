@@ -4,10 +4,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/phyer/core"
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/phyer/core"
+
 	// "sync"
 	"time"
 	//
@@ -224,6 +226,7 @@ func GetRangeCandleSortedSet(cr *core.Core, setName string, count int, from time
 		return &cdl, err
 	}
 	for _, str := range keyAry {
+		fmt.Println("str:", str)
 		if str == nil {
 			continue
 		}
