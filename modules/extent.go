@@ -379,6 +379,7 @@ func MakeSoftCandles(cr *core.Core, mcd *MyCandle) {
 		json.Unmarshal(bt, &cd0)
 
 		tmi := ToInt64(cd0.Data[0])
+		ts, _ := core.Int64ToTime(tmi)
 		tm := time.UnixMilli(tmi)
 		if tm.Unix() > 10*time.Now().Unix() {
 			continue
@@ -396,10 +397,11 @@ func MakeSoftCandles(cr *core.Core, mcd *MyCandle) {
 		}
 		otmi := otm.UnixMilli()
 		cd1 := core.Candle{
-			InstID: cd0.InstID,                      // string        `json:"instId", string`
-			Period: cs.Seg,                          //   `json:"period", string`
-			Data:   cd0.Data,                        //  `json:"data"`
-			From:   "soft|" + os.Getenv("HOSTNAME"), //  string        `json:"from"`
+			InstID:    cd0.InstID,                      // string        `json:"instId", string`
+			Period:    cs.Seg,                          //   `json:"period", string`
+			Data:      cd0.Data,                        //  `json:"data"`
+			From:      "soft|" + os.Getenv("HOSTNAME"), //  string        `json:"from"`
+			Timestamp: ts,
 		}
 		// cd0是从tickerInfo创建的1m Candle克隆来的, Data里只有Data[4]被赋值，是last，其他都是"-1"
 		// TODO 填充其余几个未赋值的字段，除了成交量和成交美元数以外，并存入redis待用
