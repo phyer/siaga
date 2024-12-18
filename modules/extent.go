@@ -315,13 +315,14 @@ func MakeMaX(cr *core.Core, cl *core.Candle, count int) (error, int) {
 
 	}
 	mx := core.MaX{
-		KeyName: keyName,
-		InstID:  cl.InstID,
-		Period:  cl.Period,
-		From:    cl.From,
-		Count:   count,
-		Ts:      tsi,
-		AvgVal:  avgLast,
+		KeyName:   keyName,
+		InstID:    cl.InstID,
+		Period:    cl.Period,
+		From:      cl.From,
+		Count:     count,
+		Ts:        tsi,
+		AvgVal:    avgLast,
+		Timestamp: cl.Timestamp,
 	}
 	// MaX的Data里包含三个有效信息：时间戳，平均值，计算平均值所采用的数列长度
 	dt := []interface{}{}
