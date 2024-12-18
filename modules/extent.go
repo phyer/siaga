@@ -315,6 +315,7 @@ func MakeMaX(cr *core.Core, cl *core.Candle, count int) (error, int) {
 
 	}
 	tm, _ := core.Int64ToTime(tsi)
+	fmt.Println("max tm:", tm)
 	mx := core.MaX{
 		KeyName:   keyName,
 		InstID:    cl.InstID,
