@@ -339,6 +339,7 @@ func MakeMaX(cr *core.Core, cl *core.Candle, count int) (error, int) {
 func CandlesProcess(cr *core.Core) {
 	for {
 		cd := <-cr.CandlesProcessChan
+		cd.LastUpdate = time.Now()
 		// logrus.Debug("cd: ", cd)
 		fmt.Println("candle in process: ", cd)
 		go func(cad *core.Candle) {
@@ -418,6 +419,7 @@ func MakeSoftCandles(cr *core.Core, mcd *MyCandle) {
 func MaXsProcess(cr *core.Core) {
 	for {
 		mx := <-cr.MaXProcessChan
+		mx.LastUpdate = time.Now()
 		logrus.Debug("mx: ", mx)
 		go func(maX *core.MaX) {
 			mmx := MyMaX{
