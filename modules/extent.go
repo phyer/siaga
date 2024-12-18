@@ -404,6 +404,9 @@ func MakeSoftCandles(cr *core.Core, mcd *MyCandle) {
 			Candle: cd0,
 		}
 		cd1.Data = mcd.GetSetCandleInfo(cr, cs.Seg, otmi)
+		tmi = ToInt64(cd1.Data[0])
+		tm = time.UnixMilli(tmi)
+		cd1.Timestamp = tm
 		// 生成软交易量和交易数对,用于代替last生成max
 		go func(k int) {
 			time.Sleep(time.Duration(100*k) * time.Millisecond)
