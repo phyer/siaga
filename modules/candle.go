@@ -140,7 +140,7 @@ func (mcd MyCandle) GetSetCandleInfo(cr *core.Core, newPeriod string, ts int64) 
 	if len(str) > 0 {
 		err := json.Unmarshal([]byte(str), &odata)
 		if err != nil {
-			logrus.Panic(GetFuncName(), " str:", str, " err:", err)
+			logrus.Panic(GetFuncName(), " str2:", str, " err:", err)
 		} else {
 			founded = true
 		}
