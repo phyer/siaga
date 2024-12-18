@@ -314,6 +314,7 @@ func MakeMaX(cr *core.Core, cl *core.Candle, count int) (error, int) {
 		// fmt.Println("makeMax keyName: ma", count, keyName, " avgLast: ", avgLast, "ts: ", tsi, "ct: ", ct, "ots: ", ots, "candle: ", string(cjs))
 
 	}
+	tm, _ := core.Int64ToTime(tsi)
 	mx := core.MaX{
 		KeyName:   keyName,
 		InstID:    cl.InstID,
@@ -322,7 +323,7 @@ func MakeMaX(cr *core.Core, cl *core.Candle, count int) (error, int) {
 		Count:     count,
 		Ts:        tsi,
 		AvgVal:    avgLast,
-		Timestamp: cl.Timestamp,
+		Timestamp: tm,
 	}
 	// MaX的Data里包含三个有效信息：时间戳，平均值，计算平均值所采用的数列长度
 	dt := []interface{}{}
