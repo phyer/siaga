@@ -6,12 +6,14 @@ import (
 
 	"github.com/phyer/core"
 	md "github.com/phyer/siaga/modules"
+	logrus "github.com/sirupsen/logrus"
 	// "github.com/sirupsen/logrus"
 )
 
 func main() {
 	cr := core.Core{}
 	cr.Init()
+	logrus.SetLevel(logrus.InfoLevel)
 	cr.TickerInforocessChan = make(chan *core.TickerInfo)
 	cr.CandlesProcessChan = make(chan *core.Candle)
 	cr.MaXProcessChan = make(chan *core.MaX)
