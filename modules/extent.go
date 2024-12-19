@@ -227,7 +227,6 @@ func GetRangeCandleSortedSet(cr *core.Core, setName string, count int, from time
 		return &cdl, err
 	}
 	for _, str := range keyAry {
-		fmt.Println("str1:", str)
 		if str == nil {
 			continue
 		}
