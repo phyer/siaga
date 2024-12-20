@@ -412,6 +412,12 @@ func MakeSoftCandles(cr *core.Core, mcd *MyCandle) {
 		tmi = ToInt64(cd1.Data[0])
 		tm = time.UnixMilli(tmi)
 		cd1.Timestamp = tm
+		cd1.Open = ToFloat64(cd1.Data[1])
+		cd1.High = ToFloat64(cd1.Data[2])
+		cd1.Low = ToFloat64(cd1.Data[3])
+		cd1.Close = ToFloat64(cd1.Data[4])
+		cd1.VolCcy = ToFloat64(cd1.Data[6])
+
 		// 生成软交易量和交易数对,用于代替last生成max
 		go func(k int) {
 			time.Sleep(time.Duration(100*k) * time.Millisecond)
