@@ -13,7 +13,7 @@ import (
 func main() {
 	cr := core.Core{}
 	cr.Init()
-	logrus.SetLevel(logrus.InfoLevel)
+	logrus.SetLevel(logrus.DebugLevel)
 	cr.TickerInforocessChan = make(chan *core.TickerInfo)
 	cr.CandlesProcessChan = make(chan *core.Candle)
 	cr.MaXProcessChan = make(chan *core.MaX)
