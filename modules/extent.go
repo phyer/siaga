@@ -168,6 +168,13 @@ func LoopMakeMaX(cr *core.Core) {
 			logrus.Warn(GetFuncName(), " ma30 err:", err, " ct:", ct, " cd.InstID:", cd.InstID, " cd.Period:", cd.Period)
 			// cd.InvokeRestQFromRemote(cr, ct)
 		}(cd)
+		go func(cad *core.Candle) {
+			time.Sleep(time.Duration(300) * time.Millisecond)
+			err, ct := MakeRsi(cr, cad, 16)
+			logrus.Warn(GetFuncName(), " ma30 err:", err, " ct:", ct, " cd.InstID:", cd.InstID, " cd.Period:", cd.Period)
+			// cd.InvokeRestQFromRemote(cr, ct)
+		}(cd)
+
 		// TODO TODO 这地方不能加延时，否则makeMax处理不过来，多的就丢弃了，造成maX的sortedSet比candle的短很多。后面所有依赖的逻辑都受影响.
 		// time.Sleep(300 * time.Millisecond)
 	}
@@ -257,7 +264,54 @@ func GetExpiration(cr *core.Core, per string) (time.Duration, error) {
 	dur := time.Duration(exp*49) * time.Minute
 	return dur, err
 }
-
+func MakeRsi(cr *core.Core, cl *core.Candle, count int) (error, int) {
+	data := cl.Data
+	js, _ := json.Marshal(data)
+	if len(data) == 0 {
+		err := errors.New("data is block: " + string(js))
+		return err, 0
+	}
+	tsi := ToInt64(data[0])
+	// tss := strconv.FormatInt(tsi, 10)
+	// keyName := "candle" + cl.Period + "|" + cl.InstID + "|ts:" + tss
+	lastTime := time.UnixMilli(tsi)
+	setName := "candle" + cl.Period + "|" + cl.InstID + "|sortedSet"
+	cdl, err := GetRangeCandleSortedSet(cr, setName, count, lastTime)
+	if err != nil {
+		return err, 0
+	}
+	// amountLast := float64(0)
+	// ct := float64(0)
+	if len(cdl.List) == 0 {
+		return err, 0
+	}
+	closeList := []float64{}
+	for _, v := range cdl.List {
+		closeList = append(closeList, ToFloat64(v.Data[4]))
+	}
+	rv, err := CalculateRSI(closeList, count)
+	if err != nil {
+		logrus.Error("CalculateRSI err: ", err)
+	}
+	rsi := core.Rsi{
+		InstID:     cl.InstID,
+		Period:     cl.Period,
+		Timestamp:  cl.Timestamp,
+		Ts:         tsi,
+		LastUpdate: time.Now(),
+		RsiVol:     rv,
+		Confirm:    false,
+	}
+	duration := time.Now().Sub(cl.Timestamp) // 获取时间差
+	if duration < 0 {
+		duration = -duration // 将时间差取绝对值
+	}
+	if duration < 3*time.Minute {
+		rsi.Confirm = true
+	}
+	cr.RsiProcessChan <- &rsi
+	return nil, 0
+}
 func MakeMaX(cr *core.Core, cl *core.Candle, count int) (error, int) {
 	data := cl.Data
 	js, _ := json.Marshal(data)
@@ -439,6 +493,18 @@ func MaXsProcess(cr *core.Core) {
 		}(mx)
 	}
 }
+func RsisProcess(cr *core.Core) {
+	for {
+		rsi := <-cr.RsiProcessChan
+		// logrus.Debug("mx: ", mx)
+		go func(rsi *core.Rsi) {
+			mrs := MyRsi{
+				Rsi: *rsi,
+			}
+			mrs.Process(cr)
+		}(rsi)
+	}
+}
 
 func TickerInfoProcess(cr *core.Core) {
 	for {
@@ -451,4 +517,42 @@ func TickerInfoProcess(cr *core.Core) {
 			mti.Process(cr)
 		}(ti)
 	}
+}
+
+// 计算 RSI 的函数
+
+// CalculateRSI calculates the RSI value for a given period and price data.
+// prices: input price data, must be equal to the period length.
+// period: the period for calculating RSI (e.g., 14).
+// Returns the RSI value (float64) or an error if input validation fails.
+func CalculateRSI(prices []float64, count int) (float64, error) {
+	if len(prices) != count {
+		return 0, errors.New("input prices length must be equal to the period length")
+	}
+
+	// Calculate gains and losses
+	var gainSum, lossSum float64
+	for i := 1; i < len(prices); i++ {
+		change := prices[i] - prices[i-1]
+		if change > 0 {
+			gainSum += change
+		} else {
+			lossSum -= change
+		}
+	}
+
+	// Average gains and losses
+	avgGain := gainSum / float64(count)
+	avgLoss := lossSum / float64(count)
+
+	// Prevent division by zero
+	if avgLoss == 0 {
+		return 100, nil // RSI is 100 if there's no loss
+	}
+
+	// Calculate RS and RSI
+	rs := avgGain / avgLoss
+	rsi := 100 - (100 / (1 + rs))
+
+	return rsi, nil
 }

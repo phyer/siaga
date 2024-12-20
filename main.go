@@ -17,6 +17,7 @@ func main() {
 	cr.TickerInforocessChan = make(chan *core.TickerInfo)
 	cr.CandlesProcessChan = make(chan *core.Candle)
 	cr.MaXProcessChan = make(chan *core.MaX)
+	cr.RsiProcessChan = make(chan *core.Rsi)
 	cr.MakeMaXsChan = make(chan *core.Candle)
 	cli, _ := cr.GetRedisLocalCli()
 	cr.RedisRemoteCli = cli
@@ -74,6 +75,9 @@ func main() {
 	}()
 	go func() {
 		md.MaXsProcess(&cr)
+	}()
+	go func() {
+		md.RsisProcess(&cr)
 	}()
 
 	// 这些暂时不运行, 以后要不要运行再说
