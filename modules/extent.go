@@ -305,8 +305,8 @@ func MakeRsi(cr *core.Core, cl *core.Candle, count int) (error, int) {
 	periodMins, err := cr.PeriodToMinutes(cl.Period)
 
 	duration := rsi.LastUpdate.Sub(cl.Timestamp) // 获取时间差
-	//最后更新时间大于一个周期，判定为已完成
-	if duration > time.Duration(periodMins)*time.Minute {
+	//最后更新时间差不多大于一个周期，判定为已完成
+	if duration > time.Duration(periodMins-1)*time.Minute {
 		rsi.Confirm = true
 	}
 	cr.RsiProcessChan <- &rsi
