@@ -288,8 +288,9 @@ func MakeRsi(cr *core.Core, cl *core.Candle, count int) (error, int) {
 	}
 	cdl.RecursiveBubbleS(len(cdl.List), "asc")
 	closeList := []float64{}
+	ll := len(cdl.List)
 	for k, v := range cdl.List {
-		fmt.Println("candle in list", k, v)
+		fmt.Println("candle in list", ll, k, v)
 		closeList = append(closeList, ToFloat64(v.Data[4]))
 	}
 	rsiList, err := CalculateRSI(closeList, count)
