@@ -17,6 +17,7 @@ func main() {
 	cr.TickerInforocessChan = make(chan *core.TickerInfo)
 	cr.CandlesProcessChan = make(chan *core.Candle)
 	cr.MaXProcessChan = make(chan *core.MaX)
+	cr.RsiProcessChan = make(chan *core.Rsi)
 	cr.StockRsiProcessChan = make(chan *core.StockRsi)
 	cr.MakeMaXsChan = make(chan *core.Candle)
 	cli, _ := cr.GetRedisLocalCli()
