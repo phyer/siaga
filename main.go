@@ -79,6 +79,9 @@ func main() {
 	go func() {
 		md.RsisProcess(&cr)
 	}()
+	go func() {
+		md.StockRsisProcess(&cr)
+	}()
 
 	// 这些暂时不运行, 以后要不要运行再说
 	// go func() {

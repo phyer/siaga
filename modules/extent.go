@@ -298,30 +298,43 @@ func MakeRsi(cr *core.Core, cl *core.Candle, count int) (error, int) {
 		fmt.Println("Error calculating RSI:", err)
 		return err, 0
 	}
-	percentK, percentD, err := CalculateStochRSI(rsiList, count, 3, 3)
-	if err != nil {
-		fmt.Println("Error calculating StochRSI:", err)
-		return err, 0
-	}
-	rsi := core.StockRsi{
+	rsi := core.Rsi{
 		InstID:     cl.InstID,
 		Period:     cl.Period,
 		Timestamp:  cl.Timestamp,
 		Ts:         tsi,
 		Count:      count,
 		LastUpdate: time.Now(),
-		KVol:       percentK[0],
-		DVol:       percentD[0],
+		RsiVol:     rsiList[len(rsiList)-1],
 		Confirm:    false,
 	}
 	periodMins, err := cr.PeriodToMinutes(cl.Period)
-
 	duration := rsi.LastUpdate.Sub(cl.Timestamp) // 获取时间差
 	//最后更新时间差不多大于一个周期，判定为已完成
 	if duration > time.Duration(periodMins-1)*time.Minute {
 		rsi.Confirm = true
 	}
-	cr.StockRsiProcessChan <- &rsi
+	cr.RsiProcessChan <- &rsi
+
+	percentK, percentD, err := CalculateStochRSI(rsiList, count, 3, 3)
+	if err != nil {
+		fmt.Println("Error calculating StochRSI:", err)
+		return err, 0
+	}
+
+	srsi := core.StockRsi{
+		InstID:     cl.InstID,
+		Period:     cl.Period,
+		Timestamp:  cl.Timestamp,
+		Ts:         tsi,
+		Count:      count,
+		LastUpdate: time.Now(),
+		KVol:       percentK[len(percentK)-1],
+		DVol:       percentD[len(percentD)-1],
+		Confirm:    true,
+	}
+
+	cr.StockRsiProcessChan <- &srsi
 	return nil, 0
 }
 func MakeMaX(cr *core.Core, cl *core.Candle, count int) (error, int) {
@@ -507,6 +520,19 @@ func MaXsProcess(cr *core.Core) {
 }
 func RsisProcess(cr *core.Core) {
 	for {
+		rsi := <-cr.RsiProcessChan
+		// logrus.Debug("mx: ", mx)
+		go func(rsi *core.Rsi) {
+			mrs := MyRsi{
+				Rsi: *rsi,
+			}
+			mrs.Process(cr)
+		}(rsi)
+	}
+}
+
+func StockRsisProcess(cr *core.Core) {
+	for {
 		srsi := <-cr.StockRsiProcessChan
 		// logrus.Debug("mx: ", mx)
 		go func(srsi *core.StockRsi) {
@@ -517,7 +543,6 @@ func RsisProcess(cr *core.Core) {
 		}(srsi)
 	}
 }
-
 func TickerInfoProcess(cr *core.Core) {
 	for {
 		ti := <-cr.TickerInforocessChan
