@@ -315,11 +315,6 @@ func MakeRsi(cr *core.Core, cl *core.Candle, count int) (error, int) {
 	if duration > time.Duration(periodMins-1)*time.Minute {
 		rsi.Confirm = true
 	}
-	fmt.Println("will send rsi")
-	go func() {
-		fmt.Println("make a rsi")
-		cr.RsiProcessChan <- &rsi
-	}()
 
 	percentK, percentD, err := CalculateStochRSI(rsiList, count, 3, 3)
 	if err != nil {
@@ -338,6 +333,12 @@ func MakeRsi(cr *core.Core, cl *core.Candle, count int) (error, int) {
 		DVol:       percentD[len(percentD)-1],
 		Confirm:    true,
 	}
+
+	fmt.Println("will send rsi")
+	go func() {
+		fmt.Println("make a rsi")
+		cr.RsiProcessChan <- &rsi
+	}()
 	fmt.Println("will send stockrsi")
 	go func() {
 		fmt.Println("make a stockrsi")
