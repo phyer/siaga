@@ -17,12 +17,12 @@ import (
 	// logrus "github.com/sirupsen/logrus"
 )
 
-type MyRsi struct {
-	core.Rsi
+type MyStockRsi struct {
+	core.StockRsi
 }
 
-func (mrsi *MyRsi) Process(cr *core.Core) {
-	rsi := mrsi.Rsi
+func (mrsi *MyStockRsi) Process(cr *core.Core) {
+	rsi := mrsi.StockRsi
 	go func() {
 		rsi.PushToWriteLogChan(cr)
 	}()
