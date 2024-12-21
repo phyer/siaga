@@ -282,7 +282,7 @@ func MakeRsi(cr *core.Core, cl *core.Candle, count int) (error, int) {
 	}
 	// amountLast := float64(0)
 	// ct := float64(0)
-	if len(cdl.List)+3 < count {
+	if len(cdl.List) < count+3 {
 		err = errors.New("sortedSet长度不足,无法进行rsi计算")
 		return err, 0
 	}
