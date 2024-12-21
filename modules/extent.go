@@ -276,13 +276,13 @@ func MakeRsi(cr *core.Core, cl *core.Candle, count int) (error, int) {
 	lastTime := time.UnixMilli(tsi)
 	setName := "candle" + cl.Period + "|" + cl.InstID + "|sortedSet"
 	// dcount := count * 2
-	cdl, err := GetRangeCandleSortedSet(cr, setName, count+3, lastTime)
+	cdl, err := GetRangeCandleSortedSet(cr, setName, count*2, lastTime)
 	if err != nil {
 		return err, 0
 	}
 	// amountLast := float64(0)
 	// ct := float64(0)
-	if len(cdl.List) < count+3 {
+	if len(cdl.List) < 2*count {
 		err = errors.New("sortedSet长度不足:" + ToString(len(cdl.List)) + " ,无法进行rsi计算")
 		return err, 0
 	}
