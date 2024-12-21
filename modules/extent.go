@@ -531,6 +531,7 @@ func RsisProcess(cr *core.Core) {
 	for {
 		rsi := <-cr.RsiProcessChan
 		// logrus.Debug("mx: ", mx)
+		fmt.Println("rsi recieved:", rsi)
 		go func(rsi *core.Rsi) {
 			mrs := MyRsi{
 				Rsi: *rsi,
@@ -544,6 +545,7 @@ func StockRsisProcess(cr *core.Core) {
 	for {
 		srsi := <-cr.StockRsiProcessChan
 		// logrus.Debug("mx: ", mx)
+		fmt.Println("stockrsi recieved:", srsi)
 		go func(srsi *core.StockRsi) {
 			mrs := MyStockRsi{
 				StockRsi: *srsi,
