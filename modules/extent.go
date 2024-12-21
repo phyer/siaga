@@ -171,7 +171,7 @@ func LoopMakeMaX(cr *core.Core) {
 		go func(cad *core.Candle) {
 			time.Sleep(time.Duration(300) * time.Millisecond)
 			err, ct := MakeRsi(cr, cad, 14)
-			logrus.Warn(GetFuncName(), " rsi16 err:", err, " ct:", ct, " cd.InstID:", cd.InstID, " cd.Period:", cd.Period)
+			logrus.Warn(GetFuncName(), " rsi14 err:", err, " ct:", ct, " cd.InstID:", cd.InstID, " cd.Period:", cd.Period)
 			// cd.InvokeRestQFromRemote(cr, ct)
 		}(cd)
 		// TODO TODO 这地方不能加延时，否则makeMax处理不过来，多的就丢弃了，造成maX的sortedSet比candle的短很多。后面所有依赖的逻辑都受影响.
@@ -283,7 +283,7 @@ func MakeRsi(cr *core.Core, cl *core.Candle, count int) (error, int) {
 	// amountLast := float64(0)
 	// ct := float64(0)
 	if len(cdl.List) < count+3 {
-		err = errors.New("sortedSet长度不足,无法进行rsi计算")
+		err = errors.New("sortedSet长度不足:" + ToString(len(cdl.List)) + " ,无法进行rsi计算")
 		return err, 0
 	}
 	cdl.RecursiveBubbleS(len(cdl.List), "asc")
