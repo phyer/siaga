@@ -275,16 +275,18 @@ func MakeRsi(cr *core.Core, cl *core.Candle, count int) (error, int) {
 	// keyName := "candle" + cl.Period + "|" + cl.InstID + "|ts:" + tss
 	lastTime := time.UnixMilli(tsi)
 	setName := "candle" + cl.Period + "|" + cl.InstID + "|sortedSet"
-	dcount := count * 2
-	cdl, err := GetRangeCandleSortedSet(cr, setName, dcount, lastTime)
+	// dcount := count * 2
+	cdl, err := GetRangeCandleSortedSet(cr, setName, count+3, lastTime)
 	if err != nil {
 		return err, 0
 	}
 	// amountLast := float64(0)
 	// ct := float64(0)
-	if len(cdl.List) == 0 {
+	if len(cdl.List)+3 < count {
+		err = errors.New("sortedSet长度不足,无法进行rsi计算")
 		return err, 0
 	}
+	cdl.RecursiveBubbleS(len(cdl.List), "asc")
 	closeList := []float64{}
 	for k, v := range cdl.List {
 		fmt.Println("candle in list", k, v)
@@ -295,14 +297,10 @@ func MakeRsi(cr *core.Core, cl *core.Candle, count int) (error, int) {
 		fmt.Println("Error calculating RSI:", err)
 		return err, 0
 	}
-	// rv, err := CalculateRSI(closeList, dcount)
 	percentK, percentD, err := CalculateStochRSI(rsiList, count, 3, 3)
 	if err != nil {
 		fmt.Println("Error calculating StochRSI:", err)
 		return err, 0
-	}
-	if err != nil {
-		logrus.Error("CalculateRSI err: ", err)
 	}
 	rsi := core.StockRsi{
 		InstID:     cl.InstID,
