@@ -289,7 +289,7 @@ func MakeRsi(cr *core.Core, cl *core.Candle, count int) (error, int) {
 	cdl.RecursiveBubbleS(len(cdl.List), "asc")
 	closeList := []float64{}
 	ll := len(cdl.List)
-	fmt.Println("candleList for rsi cal len:", ll)
+	fmt.Println("candleList len:", ll)
 	for k, v := range cdl.List {
 		fmt.Println("candle in list", ll, k, v)
 		closeList = append(closeList, ToFloat64(v.Data[4]))
@@ -316,6 +316,7 @@ func MakeRsi(cr *core.Core, cl *core.Candle, count int) (error, int) {
 		rsi.Confirm = true
 	}
 	go func() {
+		fmt.Println("make a rsi")
 		cr.RsiProcessChan <- &rsi
 	}()
 
@@ -337,6 +338,7 @@ func MakeRsi(cr *core.Core, cl *core.Candle, count int) (error, int) {
 		Confirm:    true,
 	}
 	go func() {
+		fmt.Println("make a stockrsi")
 		cr.StockRsiProcessChan <- &srsi
 	}()
 
