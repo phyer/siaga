@@ -178,6 +178,11 @@ func LoopMakeMaX(cr *core.Core) {
 			err, ct := MakeRsi(cr, cad, 12, false)
 			logrus.Warn(GetFuncName(), " rsi12 err:", err, " ct:", ct, " cd.InstID:", cd.InstID, " cd.Period:", cd.Period)
 		}(cd)
+		go func(cad *core.Candle) {
+			time.Sleep(time.Duration(300) * time.Millisecond)
+			err, ct := MakeRsi(cr, cad, 24, false)
+			logrus.Warn(GetFuncName(), " rsi24 err:", err, " ct:", ct, " cd.InstID:", cd.InstID, " cd.Period:", cd.Period)
+		}(cd)
 		// TODO TODO 这地方不能加延时，否则makeMax处理不过来，多的就丢弃了，造成maX的sortedSet比candle的短很多。后面所有依赖的逻辑都受影响.
 		// time.Sleep(300 * time.Millisecond)
 	}
