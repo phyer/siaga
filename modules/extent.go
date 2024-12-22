@@ -170,9 +170,13 @@ func LoopMakeMaX(cr *core.Core) {
 		}(cd)
 		go func(cad *core.Candle) {
 			time.Sleep(time.Duration(300) * time.Millisecond)
-			err, ct := MakeRsi(cr, cad, 14)
+			err, ct := MakeRsi(cr, cad, 14, true)
 			logrus.Warn(GetFuncName(), " rsi14 err:", err, " ct:", ct, " cd.InstID:", cd.InstID, " cd.Period:", cd.Period)
-			// cd.InvokeRestQFromRemote(cr, ct)
+		}(cd)
+		go func(cad *core.Candle) {
+			time.Sleep(time.Duration(300) * time.Millisecond)
+			err, ct := MakeRsi(cr, cad, 12, false)
+			logrus.Warn(GetFuncName(), " rsi12 err:", err, " ct:", ct, " cd.InstID:", cd.InstID, " cd.Period:", cd.Period)
 		}(cd)
 		// TODO TODO 这地方不能加延时，否则makeMax处理不过来，多的就丢弃了，造成maX的sortedSet比candle的短很多。后面所有依赖的逻辑都受影响.
 		// time.Sleep(300 * time.Millisecond)
@@ -263,7 +267,7 @@ func GetExpiration(cr *core.Core, per string) (time.Duration, error) {
 	dur := time.Duration(exp*49) * time.Minute
 	return dur, err
 }
-func MakeRsi(cr *core.Core, cl *core.Candle, count int) (error, int) {
+func MakeRsi(cr *core.Core, cl *core.Candle, count int, makeStock bool) (error, int) {
 	data := cl.Data
 	js, _ := json.Marshal(data)
 	if len(data) == 0 {
@@ -316,12 +320,21 @@ func MakeRsi(cr *core.Core, cl *core.Candle, count int) (error, int) {
 		rsi.Confirm = true
 	}
 
+	fmt.Println("will send rsi")
+	go func() {
+		fmt.Println("make a rsi")
+		cr.RsiProcessChan <- &rsi
+	}()
+	if !makeStock {
+		return nil, 0
+	}
+
 	percentK, percentD, err := CalculateStochRSI(rsiList, count, 3, 3)
+
 	if err != nil {
 		fmt.Println("Error calculating StochRSI:", err)
 		return err, 0
 	}
-
 	srsi := core.StockRsi{
 		InstID:     cl.InstID,
 		Period:     cl.Period,
@@ -334,11 +347,6 @@ func MakeRsi(cr *core.Core, cl *core.Candle, count int) (error, int) {
 		Confirm:    true,
 	}
 
-	fmt.Println("will send rsi")
-	go func() {
-		fmt.Println("make a rsi")
-		cr.RsiProcessChan <- &rsi
-	}()
 	fmt.Println("will send stockrsi")
 	go func() {
 		fmt.Println("make a stockrsi")
