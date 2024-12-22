@@ -522,7 +522,7 @@ func MakeSoftCandles(cr *core.Core, mcd *MyCandle) {
 
 		// 生成软交易量和交易数对,用于代替last生成max
 		go func(k int) {
-			time.Sleep(time.Duration(100*k) * time.Millisecond)
+			time.Sleep(time.Duration(10*k) * time.Millisecond)
 			cr.CandlesProcessChan <- &cd1
 		}(k)
 	}
