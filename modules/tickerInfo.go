@@ -63,7 +63,7 @@ func (mti *MyTickerInfo) ConvertToCandle(cr *core.Core, period string) *core.Can
 	tmi := ti.Ts
 	tmi = tmi - tmi%60000
 	cd := core.Candle{
-		InstID: ti.InstId,
+		InstID: ti.InstID,
 		Period: period,
 		Data: []interface{}{
 			strconv.FormatInt(tmi, 10), //开始时间，Unix时间戳的毫秒数格式，如 1597026383085
