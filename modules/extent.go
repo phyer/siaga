@@ -504,6 +504,8 @@ func MakeSoftCandles(cr *core.Core, mcd *MyCandle) {
 			From:      "soft|" + os.Getenv("HOSTNAME"), //  string        `json:"from"`
 			Timestamp: ts,
 		}
+
+		fmt.Println("makeSoftCandles for: ", cd1)
 		// cd0是从tickerInfo创建的1m Candle克隆来的, Data里只有Data[4]被赋值，是last，其他都是"-1"
 		// TODO 填充其余几个未赋值的字段，除了成交量和成交美元数以外，并存入redis待用
 		// strconv.FormatInt(otmi, 10)
