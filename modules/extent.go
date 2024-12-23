@@ -154,7 +154,7 @@ func LoopMakeMaX(cr *core.Core) {
 		go func(cad *core.Candle) {
 			//当一个candle的多个时间点的数据几乎同时到达时，顺序无法保证，制作maX会因为中间缺失数据而计算错，因此，等待一秒钟等数据都全了再算
 			// sz := utils.ShaiziInt(1500) + 500
-			time.Sleep(time.Duration(30) * time.Millisecond)
+			time.Sleep(time.Duration(1500) * time.Millisecond)
 			err, ct := MakeMaX(cr, cad, 7)
 			logrus.Warn(GetFuncName(), " ma7 err:", err, " ct:", ct, " cd.InstID:", cd.InstID, " cd.Period:", cd.Period)
 			//TODO 这个思路不错，单行不通，远程redis禁不住这么频繁的请求
@@ -163,23 +163,23 @@ func LoopMakeMaX(cr *core.Core) {
 		go func(cad *core.Candle) {
 			//当一个candle的多个时间点的数据几乎同时到达时，顺序无法保证，制作maX会因为中间缺失数据而计算错，因此，等待一秒钟等数据都全了再算
 			// sz := utils.ShaiziInt(2000) + 500
-			time.Sleep(time.Duration(30) * time.Millisecond)
+			time.Sleep(time.Duration(1600) * time.Millisecond)
 			err, ct := MakeMaX(cr, cad, 30)
 			logrus.Warn(GetFuncName(), " ma30 err:", err, " ct:", ct, " cd.InstID:", cd.InstID, " cd.Period:", cd.Period)
 			// cd.InvokeRestQFromRemote(cr, ct)
 		}(cd)
 		go func(cad *core.Candle) {
-			time.Sleep(time.Duration(300) * time.Millisecond)
+			time.Sleep(time.Duration(1700) * time.Millisecond)
 			err, ct := MakeRsi(cr, cad, 14, true)
 			logrus.Warn(GetFuncName(), " rsi14 err:", err, " ct:", ct, " cd.InstID:", cd.InstID, " cd.Period:", cd.Period)
 		}(cd)
 		go func(cad *core.Candle) {
-			time.Sleep(time.Duration(300) * time.Millisecond)
+			time.Sleep(time.Duration(1700) * time.Millisecond)
 			err, ct := MakeRsi(cr, cad, 12, false)
 			logrus.Warn(GetFuncName(), " rsi12 err:", err, " ct:", ct, " cd.InstID:", cd.InstID, " cd.Period:", cd.Period)
 		}(cd)
 		go func(cad *core.Candle) {
-			time.Sleep(time.Duration(300) * time.Millisecond)
+			time.Sleep(time.Duration(1700) * time.Millisecond)
 			err, ct := MakeRsi(cr, cad, 24, false)
 			logrus.Warn(GetFuncName(), " rsi24 err:", err, " ct:", ct, " cd.InstID:", cd.InstID, " cd.Period:", cd.Period)
 		}(cd)
