@@ -156,7 +156,9 @@ func LoopMakeMaX(cr *core.Core) {
 			// sz := utils.ShaiziInt(1500) + 500
 			time.Sleep(time.Duration(1500) * time.Millisecond)
 			err, ct := MakeMaX(cr, cad, 7)
-			logrus.Warn(GetFuncName(), " ma7 err:", err, " ct:", ct, " cd.InstID:", cd.InstID, " cd.Period:", cd.Period)
+			if err != nil {
+				logrus.Warn(GetFuncName(), " ma7 err:", err, " ct:", ct, " cd.InstID:", cd.InstID, " cd.Period:", cd.Period)
+			}
 			//TODO 这个思路不错，单行不通，远程redis禁不住这么频繁的请求
 			// cd.InvokeRestQFromRemote(cr, ct)
 		}(cd)
@@ -165,7 +167,9 @@ func LoopMakeMaX(cr *core.Core) {
 			// sz := utils.ShaiziInt(2000) + 500
 			time.Sleep(time.Duration(1600) * time.Millisecond)
 			err, ct := MakeMaX(cr, cad, 30)
-			logrus.Warn(GetFuncName(), " ma30 err:", err, " ct:", ct, " cd.InstID:", cd.InstID, " cd.Period:", cd.Period)
+			if err != nil {
+				logrus.Warn(GetFuncName(), " ma30 err:", err, " ct:", ct, " cd.InstID:", cd.InstID, " cd.Period:", cd.Period)
+			}
 			// cd.InvokeRestQFromRemote(cr, ct)
 		}(cd)
 		go func(cad *core.Candle) {
