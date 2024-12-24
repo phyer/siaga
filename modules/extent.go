@@ -412,7 +412,7 @@ func MakeMaX(cr *core.Core, cl *core.Candle, count int) (error, int) {
 	}
 	avgLast := amountLast / ct
 	if float64(ct) < float64(count) {
-		err := errors.New("no enough source to calculate maX ")
+		err := errors.New("no enough source to calculate maX, setName: " + setName)
 		return err, int(float64(count) - ct)
 		// fmt.Println("makeMax err: 没有足够的数据进行计算ma", "candle:", cl, "counts:", count, "ct:", ct, "avgLast: ")
 	} else {
