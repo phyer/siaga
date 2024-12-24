@@ -74,7 +74,6 @@ func (cd *MyCandle) Process(cr *core.Core) {
 		}
 		// 根据低维度candle，模拟出"软"的高纬度candle
 		if cad.Period == "1m" && makeSoft {
-			fmt.Println("makeSoft:", cad.Period, cad.InstID)
 			MakeSoftCandles(cr, cad)
 		}
 	}(cd)

@@ -237,8 +237,8 @@ func GetRangeCandleSortedSet(cr *core.Core, setName string, count int, from time
 	}
 	keyAry, err := cli.MGet(ary...).Result()
 	if err != nil || len(keyAry) == 0 {
-		logrus.Warning("no record with cmd:  ZRevRangeByScore ", setName, froms, sts, " ", err.Error())
-		logrus.Warning("zrev lens of ary: lens: ", len(ary), "GetRangeSortedSet ZRevRangeByScore:", "setName:", setName, "opt.Max:", opt.Max, "opt.Min:", opt.Min)
+		logrus.Warning("no record with cmd:  ZRevRangeByScore ", "setName: ", setName, " from: ", froms, " sts: ", sts, " err:", err.Error())
+		logrus.Warning("zrev lens of ary: lens: ", len(ary), "GetRangeSortedSet ZRevRangeByScore:", "setName:", setName, " opt.Max:", opt.Max, " opt.Min:", opt.Min)
 		return &cdl, err
 	}
 	for _, str := range keyAry {
