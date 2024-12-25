@@ -60,12 +60,12 @@ func LoopSubscribe(cr *core.Core, channelName string, redisConf *core.RedisConfi
 	if strings.Contains(env, "demoEnv") {
 		suffix = "-demoEnv"
 	}
-	fmt.Println("loopSubscribe: ", channelName+suffix)
+	logrus.Info("loopSubscribe: ", channelName+suffix)
 	pubsub := redisRemoteCli.Subscribe(channelName + suffix)
 	_, err := pubsub.Receive()
 	if err != nil {
 		// cr.ErrorToRobot(utils.GetFuncName(), err)
-		fmt.Println(GetFuncName(), " ", err)
+		logrus.Error(GetFuncName(), " ", err)
 		panic(err)
 	}
 
@@ -92,8 +92,8 @@ func LoopSubscribe(cr *core.Core, channelName string, redisConf *core.RedisConfi
 		} else {
 			logrus.Warning("channelname not match", channelName)
 		}
-		logrus.Warning("msg.Payload: ", msg.Payload)
-		fmt.Println("channelName: ", channelName, " msg.Payload: ", msg.Payload)
+		logrus.Debug("msg.Payload: ", msg.Payload)
+		// fmt.Println("channelName: ", channelName, " msg.Payload: ", msg.Payload)
 		switch ctype {
 		// 接收到的candle扔到 candle 二次加工流水线
 		case "candle":
@@ -235,7 +235,7 @@ func GetRangeCandleSortedSet(cr *core.Core, setName string, count int, from time
 	}
 	logrus.Info("ZRevRangeByScore ", setName, opt)
 	ary, err = cli.ZRevRangeByScore(setName, opt).Result()
-	fmt.Println("ary: ", ary, " setName: ", setName, " opt: ", opt)
+	// fmt.Println("ary: ", ary, " setName: ", setName, " opt: ", opt)
 	if err != nil {
 		return &cdl, err
 	}
@@ -301,15 +301,15 @@ func MakeRsi(cr *core.Core, cl *core.Candle, count int, makeStock bool) (error, 
 	}
 	cdl.RecursiveBubbleS(len(cdl.List), "asc")
 	closeList := []float64{}
-	ll := len(cdl.List)
-	fmt.Println("candleList len:", ll)
-	for k, v := range cdl.List {
-		fmt.Println("candle in list", ll, k, v)
+	// ll := len(cdl.List)
+	// fmt.Println("candleList len:", ll)
+	for _, v := range cdl.List {
+		// fmt.Println("candle in list", ll, k, v)
 		closeList = append(closeList, ToFloat64(v.Data[4]))
 	}
 	rsiList, err := CalculateRSI(closeList, count)
 	if err != nil {
-		fmt.Println("Error calculating RSI:", err)
+		logrus.Error("Error calculating RSI:", err)
 		return err, 0
 	}
 	rsi := core.Rsi{
@@ -329,9 +329,9 @@ func MakeRsi(cr *core.Core, cl *core.Candle, count int, makeStock bool) (error, 
 		rsi.Confirm = true
 	}
 
-	fmt.Println("will send rsi")
+	// fmt.Println("will send rsi")
 	go func() {
-		fmt.Println("make a rsi")
+		// fmt.Println("make a rsi")
 		cr.RsiProcessChan <- &rsi
 	}()
 	if !makeStock {
@@ -341,7 +341,7 @@ func MakeRsi(cr *core.Core, cl *core.Candle, count int, makeStock bool) (error, 
 	percentK, percentD, err := CalculateStochRSI(rsiList, count, 3, 3)
 
 	if err != nil {
-		fmt.Println("Error calculating StochRSI:", err)
+		logrus.Error("Error calculating StochRSI:", err)
 		return err, 0
 	}
 	srsi := core.StockRsi{
@@ -356,9 +356,9 @@ func MakeRsi(cr *core.Core, cl *core.Candle, count int, makeStock bool) (error, 
 		Confirm:    true,
 	}
 
-	fmt.Println("will send stockrsi")
+	// fmt.Println("will send stockrsi")
 	go func() {
-		fmt.Println("make a stockrsi")
+		// fmt.Println("make a stockrsi")
 		cr.StockRsiProcessChan <- &srsi
 	}()
 
@@ -420,7 +420,7 @@ func MakeMaX(cr *core.Core, cl *core.Candle, count int) (error, int) {
 
 	}
 	tm, _ := core.Int64ToTime(tsi)
-	fmt.Println("max tm:", tm)
+	logrus.Debug("max tm:", tm)
 	mx := core.MaX{
 		KeyName:   keyName,
 		InstID:    cl.InstID,
@@ -449,7 +449,7 @@ func CandlesProcess(cr *core.Core) {
 		cd := <-cr.CandlesProcessChan
 		cd.LastUpdate = time.Now()
 		// logrus.Debug("cd: ", cd)
-		fmt.Println("candle in process: ", cd)
+		logrus.Debug("candle in process: ", cd)
 		go func(cad *core.Candle) {
 			mcd := MyCandle{
 				Candle: *cad,
@@ -509,7 +509,7 @@ func MakeSoftCandles(cr *core.Core, mcd *MyCandle) {
 			Timestamp: ts,
 		}
 
-		fmt.Println("makeSoftCandles for: ", cd1)
+		// fmt.Println("makeSoftCandles for: ", cd1)
 		// cd0是从tickerInfo创建的1m Candle克隆来的, Data里只有Data[4]被赋值，是last，其他都是"-1"
 		// TODO 填充其余几个未赋值的字段，除了成交量和成交美元数以外，并存入redis待用
 		// strconv.FormatInt(otmi, 10)
@@ -551,7 +551,7 @@ func RsisProcess(cr *core.Core) {
 	for {
 		rsi := <-cr.RsiProcessChan
 		// logrus.Debug("mx: ", mx)
-		fmt.Println("rsi recieved:", rsi)
+		logrus.Debug("rsi recieved:", rsi)
 		go func(rsi *core.Rsi) {
 			mrs := MyRsi{
 				Rsi: *rsi,
@@ -565,7 +565,7 @@ func StockRsisProcess(cr *core.Core) {
 	for {
 		srsi := <-cr.StockRsiProcessChan
 		// logrus.Debug("mx: ", mx)
-		fmt.Println("stockrsi recieved:", srsi)
+		logrus.Debug("stockrsi recieved:", srsi)
 		go func(srsi *core.StockRsi) {
 			mrs := MyStockRsi{
 				StockRsi: *srsi,

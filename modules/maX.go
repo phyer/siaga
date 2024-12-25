@@ -3,7 +3,7 @@ package module
 import (
 	// "encoding/json"
 	// "errors"
-	"fmt"
+	// "fmt"
 	"github.com/phyer/core"
 	"os"
 	"strconv"
@@ -14,7 +14,7 @@ import (
 	// simple "github.com/bitly/go-simplejson"
 	// "github.com/go-redis/redis"
 	// "github.com/phyer/core/utils"
-	//logrus "github.com/sirupsen/logrus"
+	logrus "github.com/sirupsen/logrus"
 )
 
 type MyMaX struct {
@@ -25,7 +25,7 @@ func (mmx *MyMaX) Process(cr *core.Core) {
 	mx := mmx.MaX
 	_, err := mx.SetToKey(cr)
 	if err != nil {
-		fmt.Println("max SetToKey err: ", err)
+		logrus.Error("max SetToKey err: ", err)
 		return
 	}
 	go func() {

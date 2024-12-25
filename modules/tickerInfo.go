@@ -2,8 +2,9 @@ package module
 
 import (
 	// "errors"
-	"fmt"
+	// "fmt"
 	"github.com/phyer/core"
+	logrus "github.com/sirupsen/logrus"
 	// "math"
 	"os"
 	"strconv"
@@ -40,7 +41,7 @@ func (mti *MyTickerInfo) Process(cr *core.Core) {
 	go func() {
 		tickerToCandle := os.Getenv("SIAGA_TICKERTOCANDLE") == "true"
 		if tickerToCandle {
-			fmt.Println("tickerToCandle: ", ti)
+			logrus.Debug("tickerToCandle: ", ti)
 			cd := mti.ConvertToCandle(cr, "1m")
 			cr.CandlesProcessChan <- cd
 		}

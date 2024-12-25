@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	// "fmt"
 	"os"
 
 	"github.com/phyer/core"
@@ -25,7 +25,7 @@ func main() {
 
 	rdsLs, _ := md.GetRemoteRedisConfigList()
 	// 目前只有phyer里部署的tunas会发布tickerInfo信息
-	fmt.Println("len of rdsLs: ", len(rdsLs))
+	// fmt.Println("len of rdsLs: ", len(rdsLs))
 
 	// 订阅 redis TickerInfo
 	go func(vv *core.RedisConfig) {
@@ -33,7 +33,7 @@ func main() {
 		if !allowed {
 			return
 		}
-		fmt.Println("start subscribe core.TICKERINFO_PUBLISH")
+		logrus.Info("start subscribe core.TICKERINFO_PUBLISH")
 		md.LoopSubscribe(&cr, core.TICKERINFO_PUBLISH, vv)
 	}(rdsLs[0])
 
@@ -43,7 +43,7 @@ func main() {
 		if !allowed {
 			return
 		}
-		fmt.Println("start subscribe core.TICKERINFO_PUBLISH")
+		logrus.Info("start subscribe core.TICKERINFO_PUBLISH")
 		md.LoopSubscribe(&cr, core.ALLCANDLES_PUBLISH, vv)
 	}(rdsLs[0])
 
@@ -106,6 +106,6 @@ func main() {
 	// }
 	// allMaxs: {1634413398759-0 map[ma7|candle5m|LUNA-USDT|key:{"ts":1634412300000,"value":36.906796182686605}]}
 	// allCandles: {1634413398859-0 map[candle2H|XRP-USDT|key:{"channel":"candle2H","data":"eyJjIjoxLjExNzk1LCJmcm9tIjoicmVzdCIsImgiOjEuMTIyNzksImwiOjEuMTA4ODUsIm8iOjEuMTE3MzUsInRzIjoxNjM0MjkyMDAwMDAwLCJ2b2wiOjUwMDc5OTEuNDM5MDg1LCJ2b2xDY3kiOjU1OTE2MjUuNzI4NDc2fQ==","instId":"XRP-USDT"}]}
-	fmt.Println("siaga started")
+	logrus.Info("siaga started")
 	select {}
 }
