@@ -120,6 +120,7 @@ func LoopSubscribe(cr *core.Core, channelName string, redisConf *core.RedisConfi
 				dt = append(dt, mx.AvgVal)
 				mx.Data = dt
 				cr.MaXProcessChan <- &mx
+
 			}
 
 		// 接收到的tinckerInfo扔到 tickerInfo 二次加工流水线
@@ -448,7 +449,6 @@ func CandlesProcess(cr *core.Core) {
 	for {
 		cd := <-cr.CandlesProcessChan
 		cd.LastUpdate = time.Now()
-		// logrus.Debug("cd: ", cd)
 		logrus.Debug("candle in process: ", cd)
 		go func(cad *core.Candle) {
 			mcd := MyCandle{
