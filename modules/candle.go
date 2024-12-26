@@ -39,6 +39,7 @@ func (cd *MyCandle) Process(cr *core.Core) {
 			}
 		}
 		// 对于软candle，推到elasticSearch
+		logrus.Info("cd.from in MyCandle Process:", cd.From)
 		if strings.HasPrefix(cd.From, "soft") {
 			cd.PushToWriteLogChan(cr)
 		}
