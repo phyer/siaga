@@ -6,7 +6,7 @@ go 1.21
 
 require (
 	github.com/go-redis/redis v6.15.9+incompatible
-	github.com/phyer/core v0.1.89
+	github.com/phyer/core v0.1.91
 	github.com/sirupsen/logrus v1.9.3
 )
 
