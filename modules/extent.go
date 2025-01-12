@@ -391,15 +391,15 @@ func MakeMaX(cr *core.Core, cl *core.Candle, count int) (error, int) {
 		return err, 0
 	}
 
-	// fmt.Println("makeMaX: list: ", "instId: ", cl.InstID, "cl.Period: ", cl.Period, " lastTime:", lastTime, " count: ", count)
+	fmt.Println("makeMaX: list: ", "instId: ", cl.InstID, "cl.Period: ", cl.Period, " lastTime:", lastTime, " count: ", count)
 	amountLast := float64(0)
 	ct := float64(0)
 	// fmt.Println("makeMax len of GetLastCandleListOfCoin list: ", len(cdl.List), "makeMax err of GetLastCandleListOfCoin: ", err)
 	if len(cdl.List) == 0 {
 		return err, 0
 	}
-	// ljs, _ := json.Marshal(cdl.List)
-	// fmt.Println("makeMax: ljs: ", string(ljs))
+	ljs, _ := json.Marshal(cdl.List)
+	fmt.Println("makeMax: ljs: ", string(ljs))
 	for _, v := range cdl.List {
 		curLast, err := strconv.ParseFloat(v.Data[4].(string), 64)
 		if err != nil {
