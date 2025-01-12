@@ -408,6 +408,8 @@ func MakeMaX(cr *core.Core, cl *core.Candle, count int) (error, int) {
 		}
 		if curLast > 0 {
 			ct++
+		} else {
+			logrus.Warn("strconv.ParseFloat curLast:", curLast)
 		}
 		amountLast += curLast
 		//----------------------------------------------
