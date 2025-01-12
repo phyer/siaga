@@ -403,6 +403,7 @@ func MakeMaX(cr *core.Core, cl *core.Candle, count int) (error, int) {
 	for _, v := range cdl.List {
 		curLast, err := strconv.ParseFloat(v.Data[4].(string), 64)
 		if err != nil {
+			logrus.Warn("strconv.ParseFloat err:", err)
 			continue
 		}
 		if curLast > 0 {
