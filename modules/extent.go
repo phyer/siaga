@@ -274,7 +274,7 @@ func GetExpiration(cr *core.Core, per string) (time.Duration, error) {
 		return 0, err
 	}
 	exp, err := cr.PeriodToMinutes(per)
-	dur := time.Duration(exp*49) * time.Minute
+	dur := time.Duration(exp*319) * time.Minute
 	return dur, err
 }
 func MakeRsi(cr *core.Core, cl *core.Candle, count int, makeStock bool) (error, int) {
