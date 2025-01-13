@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/phyer/core"
 	"os"
+	"regexp"
 	"strconv"
 	"strings"
-
-	"github.com/phyer/core"
 
 	// "sync"
 	"time"
@@ -193,6 +193,19 @@ func LoopMakeMaX(cr *core.Core) {
 	}
 }
 
+func InvokeCandle(cr *core.Core, candleName string, period string, from int64, to int64) error {
+	restQ := core.RestQueue{
+		InstId: candleName,
+		Bar:    period,
+		Limit:  "100",
+		After:  from,
+	}
+	js, err := json.Marshal(restQ)
+	cli := cr.RedisLocalCli
+	_, err = cli.LPush("restQueue", js).Result()
+	return err
+}
+
 // setName := "candle" + period + "|" + instId + "|sortedSet"
 // count: 倒推多少个周期开始拿数据
 // from: 倒推的起始时间点
@@ -244,6 +257,13 @@ func GetRangeCandleSortedSet(cr *core.Core, setName string, count int, from time
 	if err != nil || len(keyAry) == 0 {
 		logrus.Warning("no record with cmd:  ZRevRangeByScore ", "setName: ", setName, " from: ", froms, " sts: ", sts, " err:", err.Error())
 		logrus.Warning("zrev lens of ary: lens: ", len(ary), "GetRangeSortedSet ZRevRangeByScore:", "setName:", setName, " opt.Max:", opt.Max, " opt.Min:", opt.Min)
+		parts := strings.Split(setName, "|")
+		instId := parts[1]
+		// 定义正则表达式，匹配 maX 或 candle 后面的内容直到第一个竖线
+		re := regexp.MustCompile(`(?:maX|candle)([^\|]+)`)
+		// 使用正则表达式提取匹配的内容
+		matches := re.FindStringSubmatch(setName)
+		err := InvokeCandle(cr, instId, matches[1], fromt, sti)
 		return &cdl, err
 	}
 	for _, str := range keyAry {
