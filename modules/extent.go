@@ -218,6 +218,7 @@ func InvokeCandle(cr *core.Core, candleName string, period string, from int64, t
 	restQ := core.RestQueue{
 		InstId: candleName,
 		Bar:    period,
+		WithWs: false,
 		Limit:  strconv.Itoa(candleCount), // 动态计算limit
 		After:  from,
 	}
@@ -290,7 +291,6 @@ func GetRangeCandleSortedSet(cr *core.Core, setName string, count int, from time
 		go func() {
 			parts := strings.Split(setName, "|")
 			instId := parts[1]
-			// 定义正则表达式，匹配 maX 或 candle 后面的内容直到第一个竖线
 			period, _ := extractString(setName)
 			InvokeCandle(cr, instId, period, fromt, sti)
 		}()
