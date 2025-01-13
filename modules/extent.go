@@ -233,7 +233,7 @@ func InvokeCandle(cr *core.Core, candleName string, period string, from int64, t
 		return fmt.Errorf("failed to push to redis: %v", err)
 	}
 
-	return nil
+	return err
 }
 
 // setName := "candle" + period + "|" + instId + "|sortedSet"
@@ -476,6 +476,25 @@ func MakeMaX(cr *core.Core, cl *core.Candle, count int) (error, int) {
 	fmt.Println("makeMax: ljs: ", string(ljs))
 	if len(cdl.List) < count {
 		err := errors.New("由于sortedSet容量有限，没有足够的元素数量来计算 maX, setName: " + setName + " ct: " + ToString(ct) + "count: " + ToString(count))
+		return err, int(float64(count) - ct)
+	}
+	for _, v := range cdl.List {
+		curLast, err := strconv.ParseFloat(v.Data[4].(string), 64)
+		if err != nil {
+			logrus.Warn("strconv.ParseFloat err:", err)
+			continue
+		}
+		if curLast > 0 {
+			ct++
+		} else {
+			logrus.Warn("strconv.ParseFloat curLast:", curLast)
+		}
+		amountLast += curLast
+		//----------------------------------------------
+	}
+	avgLast := amountLast / ct
+	if float64(ct) < float64(count) {
+		err := errors.New("no enough source to calculate maX, setName: " + setName + " ct: " + ToString(ct) + "count: " + ToString(count))
 		return err, int(float64(count) - ct)
 		// fmt.Println("makeMax err: 没有足够的数据进行计算ma", "candle:", cl, "counts:", count, "ct:", ct, "avgLast: ")
 	} else {
