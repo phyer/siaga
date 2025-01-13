@@ -194,16 +194,46 @@ func LoopMakeMaX(cr *core.Core) {
 }
 
 func InvokeCandle(cr *core.Core, candleName string, period string, from int64, to int64) error {
+	// 计算from到to之间的时间差(毫秒)
+	timeDiff := to - from
+
+	// 根据period计算每个周期的毫秒数
+	periodMinutes, err := cr.PeriodToMinutes(period)
+	if err != nil {
+		return fmt.Errorf("failed to convert period to minutes: %v", err)
+	}
+	periodMs := periodMinutes * 60 * 1000 // 转换成毫秒
+
+	// 计算需要多少个周期的数据
+	candleCount := int(timeDiff / periodMs)
+	if candleCount <= 0 {
+		return fmt.Errorf("invalid time range: from %d to %d", from, to)
+	}
+
+	// 限制最大请求数量,避免请求过大
+	if candleCount > 100 {
+		candleCount = 100
+	}
+
 	restQ := core.RestQueue{
 		InstId: candleName,
 		Bar:    period,
-		Limit:  "100",
+		Limit:  strconv.Itoa(candleCount), // 动态计算limit
 		After:  from,
 	}
+
 	js, err := json.Marshal(restQ)
+	if err != nil {
+		return fmt.Errorf("failed to marshal RestQueue: %v", err)
+	}
+
 	cli := cr.RedisLocalCli
 	_, err = cli.LPush("restQueue", js).Result()
-	return err
+	if err != nil {
+		return fmt.Errorf("failed to push to redis: %v", err)
+	}
+
+	return nil
 }
 
 // setName := "candle" + period + "|" + instId + "|sortedSet"
@@ -446,25 +476,6 @@ func MakeMaX(cr *core.Core, cl *core.Candle, count int) (error, int) {
 	fmt.Println("makeMax: ljs: ", string(ljs))
 	if len(cdl.List) < count {
 		err := errors.New("由于sortedSet容量有限，没有足够的元素数量来计算 maX, setName: " + setName + " ct: " + ToString(ct) + "count: " + ToString(count))
-		return err, int(float64(count) - ct)
-	}
-	for _, v := range cdl.List {
-		curLast, err := strconv.ParseFloat(v.Data[4].(string), 64)
-		if err != nil {
-			logrus.Warn("strconv.ParseFloat err:", err)
-			continue
-		}
-		if curLast > 0 {
-			ct++
-		} else {
-			logrus.Warn("strconv.ParseFloat curLast:", curLast)
-		}
-		amountLast += curLast
-		//----------------------------------------------
-	}
-	avgLast := amountLast / ct
-	if float64(ct) < float64(count) {
-		err := errors.New("no enough source to calculate maX, setName: " + setName + " ct: " + ToString(ct) + "count: " + ToString(count))
 		return err, int(float64(count) - ct)
 		// fmt.Println("makeMax err: 没有足够的数据进行计算ma", "candle:", cl, "counts:", count, "ct:", ct, "avgLast: ")
 	} else {
