@@ -93,6 +93,8 @@ func ToInt64(val interface{}) int64 {
 		vali, _ = strconv.ParseInt(val.(string), 10, 64)
 	} else if reflect.TypeOf(val).Name() == "float64" {
 		vali = int64(val.(float64))
+	} else if reflect.TypeOf(val).Name() == "int" {
+		vali = int64(val.(int))
 	}
 	return vali
 }
