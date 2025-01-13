@@ -260,10 +260,11 @@ func GetRangeCandleSortedSet(cr *core.Core, setName string, count int, from time
 		parts := strings.Split(setName, "|")
 		instId := parts[1]
 		// 定义正则表达式，匹配 maX 或 candle 后面的内容直到第一个竖线
-		re := regexp.MustCompile(`(?:maX|candle)([^\|]+)`)
-		// 使用正则表达式提取匹配的内容
-		matches := re.FindStringSubmatch(setName)
-		err := InvokeCandle(cr, instId, matches[1], fromt, sti)
+		period, err := extractString(setName)
+		if err != nil {
+			return &cdl, err
+		}
+		err = InvokeCandle(cr, instId, period, fromt, sti)
 		return &cdl, err
 	}
 	for _, str := range keyAry {
@@ -284,6 +285,30 @@ func GetRangeCandleSortedSet(cr *core.Core, setName string, count int, from time
 	}
 	cdl.Count = count
 	return &cdl, nil
+}
+
+func extractString(input string) (string, error) {
+	// 定位关键词 maX 或 candle
+	var prefix string
+	if strings.HasPrefix(input, "maX") {
+		prefix = "maX"
+	} else if strings.HasPrefix(input, "candle") {
+		prefix = "candle"
+	} else {
+		return "", fmt.Errorf("input does not start with 'maX' or 'candle'")
+	}
+
+	// 去掉前缀部分
+	remaining := strings.TrimPrefix(input, prefix)
+
+	// 找到第一个竖线的位置
+	pipeIndex := strings.Index(remaining, "|")
+	if pipeIndex == -1 {
+		return "", fmt.Errorf("no '|' found in the input")
+	}
+
+	// 返回竖线之前的部分
+	return remaining[:pipeIndex], nil
 }
 
 func GetExpiration(cr *core.Core, per string) (time.Duration, error) {
