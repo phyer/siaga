@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"github.com/phyer/core"
 	"os"
-	"regexp"
 	"strconv"
 	"strings"
 
