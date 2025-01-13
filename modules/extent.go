@@ -371,7 +371,7 @@ func MakeRsi(cr *core.Core, cl *core.Candle, count int, makeStock bool) (error, 
 	// amountLast := float64(0)
 	// ct := float64(0)
 	if len(cdl.List) < 2*count {
-		err = errors.New("sortedSet长度不足, 实际长度：" + ToString(len(cdl.List)) + "需要长度：" + ToString(count) + "的2倍, 无法进行rsi计算," + " setName:" + setName + "fromTime: " + ToString(lastTime))
+		err = errors.New("sortedSet长度不足, 实际长度：" + ToString(len(cdl.List)) + "需要长度：" + ToString(count) + "的2倍, 无法进行rsi计算," + " setName:" + setName + ", fromTime: " + ToString(tsi))
 		return err, 0
 	}
 	cdl.RecursiveBubbleS(len(cdl.List), "asc")
