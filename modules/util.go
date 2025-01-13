@@ -80,7 +80,7 @@ func ToString(val interface{}) string {
 	} else if reflect.TypeOf(val).Name() == "float64" {
 		valstr = strconv.FormatFloat(val.(float64), 'f', 1, 64)
 	} else if reflect.TypeOf(val).Name() == "int64" {
-		valstr = strconv.FormatInt(val.(int64), 16)
+		valstr = strconv.FormatInt(val.(int64), 10)
 	} else if reflect.TypeOf(val).Name() == "int" {
 		valstr = strconv.Itoa((val).(int))
 	}
