@@ -2,11 +2,11 @@ package main
 
 import (
 	// "fmt"
-	"os"
-
 	"github.com/phyer/core"
 	md "github.com/phyer/siaga/modules"
 	logrus "github.com/sirupsen/logrus"
+	"os"
+	"sync"
 	// "github.com/sirupsen/logrus"
 )
 
@@ -21,6 +21,7 @@ func main() {
 	cr.StockRsiProcessChan = make(chan *core.StockRsi)
 	cr.MakeMaXsChan = make(chan *core.Candle)
 	cr.WriteLogChan = make(chan *core.WriteLog)
+	cr.Mu = &sync.Mutex{}
 	cli, _ := cr.GetRedisLocalCli()
 	cr.RedisRemoteCli = cli
 
