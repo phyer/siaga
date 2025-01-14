@@ -278,7 +278,7 @@ func GetRangeCandleSortedSet(cr *core.Core, setName string, count int, from time
 	if cunt > 0 {
 		logrus.Warning("移出过期的引用数量：setName: ", setName, " cunt: ", cunt, " , ZRemRangeByScore ", setName, 0, strconv.FormatInt(oti, 10))
 	}
-	logrus.Info("ZRevRangeByScore ", setName, opt)
+	logrus.Info("ZRevRangeByScore in GetRangeCandleSortedSet: setName:", setName, " opt:", opt)
 	ary, err = cli.ZRevRangeByScore(setName, opt).Result()
 	// fmt.Println("ary: ", ary, " setName: ", setName, " opt: ", opt)
 	if err != nil {
