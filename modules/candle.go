@@ -115,7 +115,7 @@ func (cd *MyCandle) InsertIntoPlate(cr *core.Core) (*core.Sample, error) {
 
 	po, coasterFounded := pl.CoasterMap["period"+cd.Period]
 	if !coasterFounded {
-		err := pl.MakeCoaster(cr, cd.Period)
+		_, err := pl.MakeCoaster(cr, cd.Period)
 		if err != nil {
 			return nil, fmt.Errorf("failed to make coaster: %w", err)
 		}
