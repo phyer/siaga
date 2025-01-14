@@ -4,12 +4,10 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/phyer/core"
 	"os"
 	"strconv"
 	"strings"
-
-	"github.com/phyer/core"
-
 	// "sync"
 	"time"
 	//
@@ -88,52 +86,29 @@ func (cd *MyCandle) Process(cr *core.Core) {
 }
 
 func (cd *MyCandle) InsertIntoPlate(cr *core.Core) (*core.Sample, error) {
-	if cr == nil {
-		return nil, errors.New("core is nil")
-	}
-
-	if cr.Mu == nil {
-		return nil, errors.New("core mutex is nil")
-	}
-
 	cr.Mu.Lock()
 	defer cr.Mu.Unlock()
-
-	if cr.PlateMap == nil {
-		return nil, errors.New("PlateMap is nil")
-	}
-
-	pl, err := LoadPlate(cr, cd.InstID)
-	if err != nil {
-		return nil, fmt.Errorf("failed to load plate: %w", err)
-	}
+	// pl, plateFounded := cr.PlateMap[cd.InstID]
+	// if !plateFounded || pl == nil {
+	pl, _ := LoadPlate(cr, cd.InstID)
 	cr.PlateMap[cd.InstID] = pl
-
-	if pl == nil {
-		return nil, errors.New("loaded plate is nil")
-	}
-
+	// }
 	po, coasterFounded := pl.CoasterMap["period"+cd.Period]
+	err := errors.New("")
 	if !coasterFounded {
-		_, err := pl.MakeCoaster(cr, cd.Period)
-		if err != nil {
-			return nil, fmt.Errorf("failed to make coaster: %w", err)
-		}
-		po, coasterFounded = pl.CoasterMap["period"+cd.Period]
+		pl.MakeCoaster(cr, cd.Period)
 	}
 
-	if !coasterFounded || len(po.InstID) == 0 {
-		return nil, fmt.Errorf("coaster creation failed for instID: %s, period: %s", cd.InstID, cd.Period)
+	if len(po.InstID) == 0 {
+		// logrus.Debug("candle coaster: ", cd.Period, pl.CoasterMap["period"+cd.Period], pl.CoasterMap)
+		//创建失败的原因是原始数据不够，一般发生在服务中断了，缺少部分数据的情况下, 后续需要数据补全措施
+		erstr := fmt.Sprintln("coaster创建失败 candle instID: "+cd.InstID+"; period: "+cd.Period, "coasterFounded: ", coasterFounded, " ", err)
+		err := errors.New(erstr)
+		return nil, err
 	}
-
 	sm, err := po.RPushSample(cr, &cd.Candle, "candle")
-	if err != nil {
-		return nil, fmt.Errorf("failed to push sample: %w", err)
-	}
-
-	return sm, nil
+	return sm, err
 }
-
 func (cad *MyCandle) AddToGeneralCandleChnl(cr *core.Core) {
 	suffix := ""
 	env := os.Getenv("GO_ENV")
