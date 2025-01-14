@@ -22,6 +22,7 @@ func main() {
 	cr.MakeMaXsChan = make(chan *core.Candle)
 	cr.WriteLogChan = make(chan *core.WriteLog)
 	cr.Mu = &sync.Mutex{}
+	cr.PlateMap = make(map[string]*core.Plate)
 	cli, _ := cr.GetRedisLocalCli()
 	cr.RedisRemoteCli = cli
 
