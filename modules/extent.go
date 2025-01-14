@@ -288,12 +288,12 @@ func GetRangeCandleSortedSet(cr *core.Core, setName string, count int, from time
 	if err != nil || len(keyAry) == 0 {
 		logrus.Warning("no record with cmd:  ZRevRangeByScore ", "setName: ", setName, " from: ", froms, " sts: ", sts, " err:", err.Error())
 		logrus.Warning("zrev lens of ary: lens: ", len(ary), "GetRangeSortedSet ZRevRangeByScore:", "setName:", setName, " opt.Max:", opt.Max, " opt.Min:", opt.Min)
-		go func() {
-			parts := strings.Split(setName, "|")
-			instId := parts[1]
-			period, _ := extractString(setName)
-			InvokeCandle(cr, instId, period, fromt, sti)
-		}()
+		// go func() {
+		// 	parts := strings.Split(setName, "|")
+		// 	instId := parts[1]
+		// 	period, _ := extractString(setName)
+		// 	InvokeCandle(cr, instId, period, fromt, sti)
+		// }()
 		return &cdl, err
 	}
 	for _, str := range keyAry {

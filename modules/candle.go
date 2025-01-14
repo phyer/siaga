@@ -225,4 +225,4 @@ func (mcd MyCandle) GetSetCandleInfo(cr *core.Core, newPeriod string, ts int64) 
 			return cd.Data
 		}
 	}
-}
+}v0.1.102-0.20250114162456-b9d1cb390c17
