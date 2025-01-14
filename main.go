@@ -20,6 +20,7 @@ func main() {
 	cr.RsiProcessChan = make(chan *core.Rsi)
 	cr.StockRsiProcessChan = make(chan *core.StockRsi)
 	cr.MakeMaXsChan = make(chan *core.Candle)
+	cr.WriteLogChan = make(chan *core.WriteLog)
 	cli, _ := cr.GetRedisLocalCli()
 	cr.RedisRemoteCli = cli
 
