@@ -462,9 +462,9 @@ func MakeMaX(cr *core.Core, cl *core.Candle, count int) (error, int) {
 	// cdl, err := cr.GetLastCandleListOfCoin(cl.InstID, cl.Period, count, lastTime)
 	cdl, err := GetRangeCandleSortedSet(cr, setName, count, lastTime)
 	if err != nil {
-		to, _ := cr.PeriodToMinutes(cl.Period)
-		to = tsi + to*ToInt64(count)
-		InvokeCandle(cr, cl.InstID, cl.Period, tsi, to)
+		// to, _ := cr.PeriodToMinutes(cl.Period)
+		// to = tsi + to*ToInt64(count)
+		// InvokeCandle(cr, cl.InstID, cl.Period, tsi, to)
 		return err, 0
 	}
 
