@@ -2,23 +2,33 @@ package module
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
-	"github.com/phyer/core"
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/phyer/core"
+
 	// "sync"
 	"time"
 	//
 	// simple "github.com/bitly/go-simplejson"
 	// "github.com/go-redis/redis"
 	// "github.com/phyer/core/utils"
+	"sync"
+
 	logrus "github.com/sirupsen/logrus"
 )
 
 type MyCandle struct {
 	core.Candle
+}
+
+// A. 使用对象池减少内存分配
+var samplePool = sync.Pool{
+	New: func() interface{} {
+		return new(core.Candle)
+	},
 }
 
 func (cd *MyCandle) Process(cr *core.Core) {
@@ -86,29 +96,55 @@ func (cd *MyCandle) Process(cr *core.Core) {
 }
 
 func (cd *MyCandle) InsertIntoPlate(cr *core.Core) (*core.Sample, error) {
-	cr.Mu.Lock()
-	defer cr.Mu.Unlock()
-	// pl, plateFounded := cr.PlateMap[cd.InstID]
-	// if !plateFounded || pl == nil {
-	pl, _ := LoadPlate(cr, cd.InstID)
-	cr.PlateMap[cd.InstID] = pl
-	// }
-	po, coasterFounded := pl.CoasterMap["period"+cd.Period]
-	err := errors.New("")
-	if !coasterFounded {
-		pl.MakeCoaster(cr, cd.Period)
+	// 1. 参数检查
+	if cr == nil || cd.InstID == "" || cd.Period == "" {
+		return nil, fmt.Errorf("invalid parameters: core=%v, instID=%s, period=%s",
+			cr != nil, cd.InstID, cd.Period)
 	}
 
-	if len(po.InstID) == 0 {
-		// logrus.Debug("candle coaster: ", cd.Period, pl.CoasterMap["period"+cd.Period], pl.CoasterMap)
-		//创建失败的原因是原始数据不够，一般发生在服务中断了，缺少部分数据的情况下, 后续需要数据补全措施
-		erstr := fmt.Sprintln("coaster创建失败 candle instID: "+cd.InstID+"; period: "+cd.Period, "coasterFounded: ", coasterFounded, " ", err)
-		err := errors.New(erstr)
-		return nil, err
+	// 2. 使用普通互斥锁 (因为sync.Mutex没有RLock方法)
+	cr.Mu.Lock()
+	pl, exists := cr.PlateMap[cd.InstID]
+
+	if !exists {
+		var err error
+		pl, err = LoadPlate(cr, cd.InstID)
+		if err != nil {
+			cr.Mu.Unlock()
+			return nil, fmt.Errorf("failed to load plate: %v", err)
+		}
+		cr.PlateMap[cd.InstID] = pl
 	}
+	cr.Mu.Unlock()
+
+	if pl == nil {
+		return nil, fmt.Errorf("plate is nil for InstID: %s", cd.InstID)
+	}
+
+	// 3. 处理Coaster
+	coasterKey := "period" + cd.Period
+	po, coasterFounded := pl.CoasterMap[coasterKey]
+	if !coasterFounded {
+		if err := pl.MakeCoaster(cr, cd.Period); err != nil {
+			return nil, fmt.Errorf("failed to make coaster: %v", err)
+		}
+		po, coasterFounded = pl.CoasterMap[coasterKey]
+	}
+
+	// 4. 验证coaster (修改判断方式)
+	if !coasterFounded || po.InstID == "" {
+		return nil, fmt.Errorf("invalid coaster for %s period %s", cd.InstID, cd.Period)
+	}
+
+	// 5. 推送样本
 	sm, err := po.RPushSample(cr, &cd.Candle, "candle")
-	return sm, err
+	if err != nil {
+		return nil, fmt.Errorf("failed to push sample: %v", err)
+	}
+
+	return sm, nil
 }
+
 func (cad *MyCandle) AddToGeneralCandleChnl(cr *core.Core) {
 	suffix := ""
 	env := os.Getenv("GO_ENV")
