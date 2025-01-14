@@ -475,7 +475,8 @@ func MakeMaX(cr *core.Core, cl *core.Candle, count int) (error, int) {
 	if len(cdl.List) == 0 {
 		return err, 0
 	}
-	ljs, _ := json.Marshal(cdl.List)
+	// ljs, _ := json.Marshal(cdl.List)
+	// fmt.Println("makeMax: ljs: ", string(ljs))
 	if len(cdl.List) < count {
 		err := errors.New("由于sortedSet容量有限，没有足够的元素数量来计算 maX, setName: " + setName + " ct: " + ToString(ct) + "count: " + ToString(count))
 		return err, int(float64(count) - ct)
