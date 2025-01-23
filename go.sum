@@ -49,8 +49,8 @@ github.com/onsi/gomega v1.10.1/go.mod h1:iN09h71vgCQne3DLsj+A5owkum+a2tYe+TOCB1y
 github.com/onsi/gomega v1.17.0/go.mod h1:HnhC7FXeEQY45zxNK3PPoIUhzk/80Xly9PcubAlGdZY=
 github.com/onsi/gomega v1.18.1 h1:M1GfJqGRrBrrGGsbxzV5dqM2U2ApXefZCQpkukxYRLE=
 github.com/onsi/gomega v1.18.1/go.mod h1:0q+aL8jAiMXy9hbwj2mr5GziHiwhAIQpFmmtT5hitRs=
-github.com/phyer/core v0.2.16 h1:ssuBoL3lKe1+JkDuOSLjLB/v+MLq4nh98gbmPyOMIRM=
-github.com/phyer/core v0.2.16/go.mod h1:XZdniJiiZPzOU8+QHPFRQWdvJa6m5Ilj5VClWWI0OQg=
+github.com/phyer/core v0.2.18 h1:kgAH4FSugwZisR1yIzq4Ru+qAU13/yQLNwCooEfzWq8=
+github.com/phyer/core v0.2.18/go.mod h1:XZdniJiiZPzOU8+QHPFRQWdvJa6m5Ilj5VClWWI0OQg=
 github.com/phyer/texus v0.0.0-20241207132635-0e7fb63f8196 h1:P1sxgCsS0VIL38ufZzgUuZLLyY/B+po6kSY7ziNZT7E=
 github.com/phyer/texus v0.0.0-20241207132635-0e7fb63f8196/go.mod h1:iZexs5agdApNlp8HW/FqKgma4Ij1x8/o+ZLcMvY3f80=
 github.com/phyer/v5sdkgo v0.1.4 h1:mAxxjPJVTYGuGDarqOcFGkzj5AgqbbzJGsnYmmsbapU=

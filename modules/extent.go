@@ -269,7 +269,7 @@ func GetRangeCandleSortedSet(cr *core.Core, setName string, count int, from time
 		Count: int64(count),
 	}
 	ary := []string{}
-	extt, err := GetExpiration(cr, period)
+	extt, err := cr.GetExpiration(period)
 	ot := time.Now().Add(extt * -1)
 	oti := ot.UnixMilli()
 	cli := cr.RedisLocalCli
@@ -340,17 +340,17 @@ func extractString(input string) (string, error) {
 	return remaining[:pipeIndex], nil
 }
 
-func GetExpiration(cr *core.Core, per string) (time.Duration, error) {
-	if len(per) == 0 {
-		erstr := fmt.Sprint("period没有设置")
-		logrus.Warn(erstr)
-		err := errors.New(erstr)
-		return 0, err
-	}
-	exp, err := cr.PeriodToMinutes(per)
-	dur := time.Duration(exp*319) * time.Minute
-	return dur, err
-}
+//	func GetExpiration(cr *core.Core, per string) (time.Duration, error) {
+//		if len(per) == 0 {
+//			erstr := fmt.Sprint("period没有设置")
+//			logrus.Warn(erstr)
+//			err := errors.New(erstr)
+//			return 0, err
+//		}
+//		exp, err := cr.PeriodToMinutes(per)
+//		dur := time.Duration(exp*319) * time.Minute
+//		return dur, err
+//	}
 func MakeRsi(cr *core.Core, cl *core.Candle, count int, makeStock bool) (error, int) {
 	data := cl.Data
 	js, _ := json.Marshal(data)
