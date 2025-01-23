@@ -145,6 +145,9 @@
 			"index": 5,
 			"description": ""
 		},
+		"sortedSet": {
+			"length": 3000
+		},
 		"credential": {
 			"secretKey": "D6D74DF9DD60A25BE2B27CA71D8F814D",
 			"baseUrl": "aws.okx.com",
