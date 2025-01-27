@@ -43,8 +43,9 @@ func LoadPlate(cr *core.Core, instId string) (*core.Plate, error) {
 	if err == nil && str != "" {
 		// 将JSON字符串反序列化为Plate对象
 		if err := json.Unmarshal([]byte(str), &pl); err != nil {
-			// 反序列化失败时返回错误
-			return nil, fmt.Errorf("failed to unmarshal plate data: %v", err)
+			// 反序列化失败时初始化一个新的Plate
+			logrus.Warnf("failed to unmarshal plate data from redis, init new plate: %v", err)
+			pl.Init(instId)
 		}
 		// 返回从Redis加载的Plate对象
 		return &pl, nil
