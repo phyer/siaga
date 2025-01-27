@@ -30,43 +30,32 @@ func main() {
 	// 目前只有phyer里部署的tunas会发布tickerInfo信息
 	// fmt.Println("len of rdsLs: ", len(rdsLs))
 
-	// 订阅 redis TickerInfo
-	go func(vv *core.RedisConfig) {
-		allowed := os.Getenv("SIAGA_ACCEPTTICKER") == "true"
-		if !allowed {
-			return
-		}
-		logrus.Info("start subscribe core.TICKERINFO_PUBLISH")
-		md.LoopSubscribe(&cr, core.TICKERINFO_PUBLISH, vv)
-	}(rdsLs[0])
+	// 定义订阅配置
+	subscriptions := []struct {
+		envVar    string
+		channel   string
+		logPrefix string
+	}{
+		{"SIAGA_ACCEPTTICKER", core.TICKERINFO_PUBLISH, "TickerInfo"},
+		{"SIAGA_ACCEPTCANDLE", core.ALLCANDLES_PUBLISH, "Candles"},
+		{"SIAGA_ACCEPTMAX", core.ALLMAXES_PUBLISH, "Max"},
+		{"SIAGA_ACCEPTSERIES", core.ALLSERIESINFO_PUBLISH, "Series"},
+	}
 
-	// 订阅 redis Candles
-	go func(vv *core.RedisConfig) {
-		allowed := os.Getenv("SIAGA_ACCEPTCANDLE") == "true"
-		if !allowed {
-			return
-		}
-		logrus.Info("start subscribe core.TICKERINFO_PUBLISH")
-		md.LoopSubscribe(&cr, core.ALLCANDLES_PUBLISH, vv)
-	}(rdsLs[0])
-
-	// 订阅 redis Max
-	go func(vv *core.RedisConfig) {
-		allowed := os.Getenv("SIAGA_ACCEPTMAX") == "true"
-		if !allowed {
-			return
-		}
-		md.LoopSubscribe(&cr, core.ALLMAXES_PUBLISH, vv)
-	}(rdsLs[0])
-
-	// 下面这个暂时不运行, 在环境变量里把它关掉
-	go func(vv *core.RedisConfig) {
-		allowed := os.Getenv("SIAGA_ACCEPTSERIES") == "true"
-		if !allowed {
-			return
-		}
-		md.LoopSubscribe(&cr, core.ALLSERIESINFO_PUBLISH, vv)
-	}(rdsLs[0])
+	// 启动所有订阅
+	for _, sub := range subscriptions {
+		go func(s struct {
+			envVar    string
+			channel   string
+			logPrefix string
+		}) {
+			if os.Getenv(s.envVar) != "true" {
+				return
+			}
+			logrus.Infof("start subscribe %s: %s", s.logPrefix, s.channel)
+			md.LoopSubscribe(&cr, s.channel, rdsLs[0])
+		}(sub)
+	}
 
 	go func() {
 		md.TickerInfoProcess(&cr)
