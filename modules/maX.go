@@ -71,12 +71,20 @@ func (mmx *MyMaX) InsertIntoPlate(cr *core.Core) (*core.Sample, error) {
 	pl, ok := cr.PlateMap[mx.InstID]
 	// 尝试放弃一级缓存
 	// if !ok {
-	pl, _ = LoadPlate(cr, mx.InstID)
+	pl, err := LoadPlate(cr, mx.InstID)
+	if err != nil || pl == nil {
+		logrus.Errorf("failed to load plate for instID: %s, error: %v", mx.InstID, err)
+		return nil, err
+	}
 	cr.PlateMap["period"+mx.Period] = pl
 	// }
 	_, ok = pl.CoasterMap["period"+mx.Period]
 	if !ok {
-		pl.MakeCoaster(cr, mx.Period)
+		if err := pl.MakeCoaster(cr, mx.Period); err != nil {
+			logrus.Errorf("failed to make coaster for instID: %s, period: %s, error: %v",
+				mx.InstID, mx.Period, err)
+			return nil, err
+		}
 	}
 	// if pl.CoasterMap["period"+mx.Period] == nil {
 	// fmt.Println("candle coaster: ", mx.Period, pl.CoasterMap["period"+mx.Period], pl.CoasterMap)
@@ -84,9 +92,9 @@ func (mmx *MyMaX) InsertIntoPlate(cr *core.Core) (*core.Sample, error) {
 	// err := errors.New("coaster创建失败 maX instId: " + mx.InstID + "; period: " + mx.Period)
 	// return nil, err
 	// }
-	coaster := pl.CoasterMap["period"+mx.Period]
-	if reflect.ValueOf(coaster).IsNil() {
-		logrus.Warnf("coaster is nil for instID: %s, period: %s", mx.InstID, mx.Period)
+	coaster, ok := pl.CoasterMap["period"+mx.Period]
+	if !ok || reflect.ValueOf(coaster).IsNil() {
+		logrus.Warnf("coaster is nil or not found for instID: %s, period: %s", mx.InstID, mx.Period)
 		return nil, nil
 	}
 	sm, err := coaster.RPushSample(cr, mx, "ma"+strconv.Itoa(mx.Count))
