@@ -6,6 +6,7 @@ import (
 	// "fmt"
 	"github.com/phyer/core"
 	"os"
+	"reflect"
 	"strconv"
 	//"strings"
 	// "sync"
@@ -83,6 +84,11 @@ func (mmx *MyMaX) InsertIntoPlate(cr *core.Core) (*core.Sample, error) {
 	// err := errors.New("coaster创建失败 maX instId: " + mx.InstID + "; period: " + mx.Period)
 	// return nil, err
 	// }
-	sm, err := pl.CoasterMap["period"+mx.Period].RPushSample(cr, mx, "ma"+strconv.Itoa(mx.Count))
+	coaster := pl.CoasterMap["period"+mx.Period]
+	if reflect.ValueOf(coaster).IsNil() {
+		logrus.Warnf("coaster is nil for instID: %s, period: %s", mx.InstID, mx.Period)
+		return nil, nil
+	}
+	sm, err := coaster.RPushSample(cr, mx, "ma"+strconv.Itoa(mx.Count))
 	return sm, err
 }
