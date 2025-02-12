@@ -71,7 +71,7 @@ func (mmx *MyMaX) InsertIntoPlate(cr *core.Core) (*core.Sample, error) {
 	pl, ok := cr.PlateMap[mx.InstID]
 	// 尝试放弃一级缓存
 	// if !ok {
-	pl, err := LoadPlate(cr, mx.InstID)
+	pl, err := core.LoadPlate(cr, mx.InstID)
 	if err != nil || pl == nil {
 		logrus.Errorf("failed to load plate for instID: %s, error: %v", mx.InstID, err)
 		return nil, err

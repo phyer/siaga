@@ -108,7 +108,7 @@ func (cd *MyCandle) InsertIntoPlate(cr *core.Core) (*core.Sample, error) {
 
 	if !exists {
 		var err error
-		pl, err = LoadPlate(cr, cd.InstID)
+		pl, err = core.LoadPlate(cr, cd.InstID)
 		if err != nil {
 			cr.Mu.Unlock()
 			return nil, fmt.Errorf("failed to load plate: %v", err)
