@@ -93,8 +93,13 @@ func (mmx *MyMaX) InsertIntoPlate(cr *core.Core) (*core.Sample, error) {
 	// return nil, err
 	// }
 	coaster, ok := pl.CoasterMap["period"+mx.Period]
-	if !ok || reflect.ValueOf(coaster).IsNil() {
-		logrus.Warnf("coaster is nil or not found for instID: %s, period: %s", mx.InstID, mx.Period)
+	if !ok {
+		logrus.Warnf("coaster not found for instID: %s, period: %s", mx.InstID, mx.Period)
+		return nil, nil
+	}
+	// 对于结构体实例，我们可以检查其关键字段是否为零值
+	if reflect.DeepEqual(coaster, core.Coaster{}) {
+		logrus.Warnf("coaster is zero value for instID: %s, period: %s", mx.InstID, mx.Period)
 		return nil, nil
 	}
 	sm, err := coaster.RPushSample(cr, mx, "ma"+strconv.Itoa(mx.Count))
