@@ -77,9 +77,9 @@ func main() {
 	}()
 
 	// 这些暂时不运行, 以后要不要运行再说
-	// go func() {
-	// 	core.CoasterProcess(&cr)
-	// }()
+	go func() {
+		md.CoasterProcess(&cr)
+	}()
 	// go func() {
 	// 	core.SeriesProcess(&cr)
 	// }()

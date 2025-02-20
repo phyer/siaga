@@ -725,6 +725,16 @@ func MaXsProcess(cr *core.Core) {
 		}(mx)
 	}
 }
+
+func CoasterProcess(cr *core.Core) {
+	for {
+		ci := <-cr.CoasterChan
+		go func(coa *core.CoasterInfo) {
+			coa.Process(cr)
+		}(ci)
+
+	}
+}
 func RsisProcess(cr *core.Core) {
 	for {
 		rsi := <-cr.RsiProcessChan

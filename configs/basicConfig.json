@@ -199,7 +199,8 @@
       "OKB-USDT",
       "DOGE-USDT",
       "SOL-USDT",
-      "DYDX-USDT"
+      "DYDX-USDT",
+      "TRUMP-USDT"
     ],
 		"softCandleSegmentList": [{
 		    "startTime": "2021-12-04 20:00.000",
